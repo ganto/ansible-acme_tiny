@@ -1,0 +1,145 @@
+---
+
+- name: Certificate renewal user
+  user:
+    name: '{{ acme_tiny__user_name }}'
+    group: '{{ acme_tiny__user_group }}'
+    system: True
+    home: '{{ acme_tiny__user_home }}'
+    createhome: yes
+
+- name: Ansible configuration
+  template:
+    src: 'ansible.cfg.j2'
+    dest: '{{ acme_tiny__user_home }}/.ansible.cfg'
+    owner: '{{ acme_tiny__user_name }}'
+    group: '{{ acme_tiny__user_group }}'
+    mode: '0644'
+
+- name: Configuration directory
+  file:
+    path: '{{ acme_tiny__config_dir }}'
+    state: directory
+    owner: 'root'
+    group: 'root'
+    mode: '0755'
+
+- name: Challenge and logging directory
+  file:
+    path: '{{ item }}'
+    state: directory
+    owner: '{{ acme_tiny__user_name }}'
+    group: '{{ acme_tiny__user_group }}'
+    mode: '0755'
+  with_items:
+    - '{{ acme_tiny__challenge_dir }}'
+    - '{{ acme_tiny__log_dir }}'
+
+- name: Certificate directory
+  file:
+    path: '{{ acme_tiny__cert_dir }}'
+    state: directory
+    owner: '{{ acme_tiny__user_name }}'
+    group: '{{ acme_tiny__user_group }}'
+    mode: '0755'
+
+- name: Account key permissions
+  file:
+    path: '{{ acme_tiny__config_dir }}/{{ acme_tiny__account_key }}'
+    owner: 'root'
+    group: '{{ acme_tiny__user_group }}'
+    mode: '0640'
+
+- name: Download letsencrypt CA and intermediate certificates
+  get_url:
+    url: '{{ item.url }}'
+    dest: '{{ acme_tiny__config_dir }}/{{ item.file }}'
+    owner: 'root'
+    group: 'root'
+    mode: '0644'
+  with_items:
+    - url: 'https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem'
+      file: 'intermediate.crt'
+    - url: 'https://letsencrypt.org/certs/isrgrootx1.pem'
+      file: 'ca.crt'
+
+- name: Private key
+  shell: /usr/bin/openssl genrsa '{{ acme_tiny__key_length }}' > '{{ acme_tiny__private_key }}'
+  args:
+    creates: '{{ acme_tiny__private_key }}'
+
+- name: Private key permissions
+  file:
+    path: '{{ acme_tiny__private_key }}'
+    owner: 'root'
+    group: '{{ acme_tiny__user_group }}'
+    mode: '0640'
+
+- name: Certificate request
+  shell: '/usr/bin/openssl req -new -sha256 -key {{ acme_tiny__private_key }} -subj "/CN={{ acme_tiny__domain }}" > {{ acme_tiny__cert_request }}'
+  args:
+    creates: '{{ acme_tiny__cert_request }}'
+  when: acme_tiny__domain is string
+
+- name: Multi-domain certificate request
+  shell: '/usr/bin/openssl req -new -sha256 -key {{ acme_tiny__private_key }} -subj "/" -reqexts SAN -config <(cat /etc/ssl/openssl.cnf <(printf "[SAN]\nsubjectAltName=DNS:{{ acme_tiny__domain | join(",DNS:") }}")) > {{ acme_tiny__cert_request }}'
+  args:
+    executable: '/bin/bash'
+    creates: '{{ acme_tiny__cert_request }}'
+  when: acme_tiny__domain is iterable and not acme_tiny__domain is string
+  failed_when: False
+
+- name: Service SSL directory
+  file:
+    path: '/etc/{{ item }}/ssl'
+    state: directory
+    owner: 'root'
+    group: 'root'
+    mode: '0755'
+  when: item in [ 'apache2', 'dovecot', 'httpd', 'lighttpd', 'nginx',
+                  'postfix' ]
+  with_items: '{{ acme_tiny__cert_type
+                  if acme_tiny__cert_type is iterable and not acme_tiny__cert_type is string
+                  else [ acme_tiny__cert_type ] }}'
+
+- name: Domain key links
+  file:
+    src: '{{ acme_tiny__private_key }}'
+    path: '/etc/{{ item }}/ssl/{{ acme_tiny__cert_name }}.key'
+    state: link
+    owner: 'root'
+    group: 'root'
+    force: yes
+  when: item in [ 'apache2', 'dovecot', 'httpd', 'nginx', 'postfix' ]
+  with_items: '{{ acme_tiny__cert_type
+                  if acme_tiny__cert_type is iterable and not acme_tiny__cert_type is string
+                  else [ acme_tiny__cert_type ] }}'
+
+- name: Service certificate links
+  file:
+    src: '{{ acme_tiny__certificate
+             if item in [ "apache2", "dovecot", "httpd", "nginx" ]
+             else acme_tiny__cert_dir + "/" + acme_tiny__cert_name + "_" + item + ".crt" }}'
+    path: '/etc/{{ item }}/ssl/{{ acme_tiny__cert_name }}.crt'
+    state: link
+    owner: 'root'
+    group: 'root'
+    force: yes
+  when: item in [ 'apache2', 'dovecot', 'httpd', 'lighttpd', 'nginx',
+                  'postfix' ]
+  with_items: '{{ acme_tiny__cert_type
+                  if acme_tiny__cert_type is iterable and not acme_tiny__cert_type is string
+                  else [ acme_tiny__cert_type ] }}'
+
+- name: Sudo rule for service restart
+  template:
+    src: sudoers.d-rule.j2
+    dest: '/etc/sudoers.d/{{ acme_tiny__user_name }}-{{ item }}'
+    owner: 'root'
+    group: 'root'
+    mode: '0440'
+  when: item in [ 'apache2', 'dovecot', 'httpd', 'lighttpd', 'nginx',
+                  'postfix' ]
+  with_items: '{{ acme_tiny__cert_type
+                  if acme_tiny__cert_type is iterable and not acme_tiny__cert_type is string
+                  else [ acme_tiny__cert_type ] }}'

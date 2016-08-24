@@ -1,0 +1,4 @@
+{{ ansible_managed | comment }}
+
+# Allow restart of {{ item }} after certificate update
+{{ acme_tiny__user_name }} ALL=(root) NOPASSWD: /usr/bin/systemctl restart {{ item }}
