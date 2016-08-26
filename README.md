@@ -133,10 +133,13 @@ the `root` user to setup the necessary environment:
 If you have different domains, you might want to configure the individual
 certificate properties in a separate `vars/` file. After the initial setup,
 the following command which can be run with the dedicated `certbot` account
-will get you a new certificate:
+will get you a new certificate. E.g. you can define a cronjob
+`/etc/cron.d/acme-tiny`:
 
 ```bash
-ansible-playbook -e @vars/example.com.yml playbooks/acme_tiny.yml
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+
+@monthly certbot /usr/bin/ansible-playbook -e @/etc/ansible/vars/example.com.yml /etc/ansible/playbooks/acme_tiny.yml >/dev/null
 ```
 
 ### Configuration
