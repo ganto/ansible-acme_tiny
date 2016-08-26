@@ -24,16 +24,16 @@
     mode: '0644'
 
 - block:
-    - name: Create lighttpd certificate
+    - name: Merge certificate/key for lighttpd
       shell: 'cat {{ acme_tiny__private_key }} {{ acme_tiny__certificate }} > {{ acme_tiny__cert_dir }}/{{ acme_tiny__cert_name }}_lighttpd.crt'
 
     - name: Fix lighttpd certificate permissions
       file:
         path: '{{ acme_tiny__cert_dir }}/{{ acme_tiny__cert_name }}_lighttpd.crt'
-        owner: '{{ acme_tiny__user_name }}'
-        group: '{{ acme_tiny__user_group }}'
         mode: '0600'
 
+  become: True
+  become_user: '{{ acme_tiny__user_name }}'
   when: (acme_tiny__cert_type == 'lighttpd') or
         ('lighttpd' in acme_tiny__cert_type)
 
@@ -44,16 +44,17 @@
     - name: Fix postfix certificate permissions
       file:
         path: '{{ acme_tiny__cert_dir }}/{{ acme_tiny__cert_name }}_postfix.crt'
-        owner: '{{ acme_tiny__user_name }}'
-        group: '{{ acme_tiny__user_group }}'
         mode: '0644'
 
+  become: True
+  become_user: '{{ acme_tiny__user_name }}'
   when: (acme_tiny__cert_type == 'postfix') or
         ('postfix' in acme_tiny__cert_type)
 
 - name: Restart service
   command: sudo -n /usr/bin/systemctl restart '{{ item }}'
   register: acme_tiny__register_service_restart
+  when: acme_tiny__register_certificate | changed
   with_items: '{{ acme_tiny__cert_type
                   if acme_tiny__cert_type is iterable and not acme_tiny__cert_type is string
                   else [ acme_tiny__cert_type ] }}'
