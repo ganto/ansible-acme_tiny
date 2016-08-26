@@ -141,136 +141,125 @@ ansible-playbook -e @vars/example.com.yml playbooks/acme_tiny.yml
 
 ### Configuration
 
+#### Directory layout
+
+The role will setup a configurable directory layout to store the certificates
+and make them accessible.
+
+```txt
+/etc/ssl/acme-tiny                                   # acme_tiny__config_dir
+/etc/ssl/acme-tiny/example.com                       # acme_tiny__cert_dir
+/etc/ssl/acme-tiny/example.com/example.com.key       # acme_tiny__private_key
+/etc/ssl/acme-tiny/example.com/example.com.crq       # acme_tiny__cert_request
+/etc/ssl/acme-tiny/example.com/example.com.crt       # acme_tiny__certificate
+```
+
+There is a layer of indirection through symlinks which will make the
+certificates accessible in a unified way. For each service the role will
+create a `ssl/` subdirectory from where the actual certificates and keys are
+symlinked. Like this the CA could be changed easily without reconfiguration
+of the secured services.
+
+E.g. for Lighttpd, this would look like this:
+
+```txt
+/etc/lighttpd/ssl/example.com.crt -> /etc/ssl/acme-tiny/example.com/example.com_lighttpd.crt
+```
+
+Or for Dovecot:
+
+```txt
+/etc/postfix/ssl/example.com.crt -> /etc/ssl/acme-tiny/example.com/example.com.crt
+/etc/postfix/ssl/example.com.key -> /etc/ssl/acme-tiny/example.com/example.com.key
+```
+
 #### Role variables
 
 List of default variables available in the inventory:
 
 ```YAML
----
-# .. vim: foldmarker=[[[,]]]:foldmethod=marker
+# Basic configuration
+# -------------------
 
-# ganto.acme_tiny default variables [[[
-# =====================================
-
-# .. contents:: Sections
-#    :local:
-
-# Basic configuration [[[
-# -----------------------
-
-# .. envvar:: acme_tiny__config_dir
-#
 # Configuration base directory
 acme_tiny__config_dir: '/etc/ssl/acme-tiny'
 
 
-# .. envvar:: acme_tiny__challenge_dir
-#
 # Directory accessible through a HTTP server used for temporary challenge
 # storage.
 acme_tiny__challenge_dir: '/var/www/acme-challenges'
 
 
-# .. envvar:: acme_tiny__log_dir
-#
 # Log directory.
 acme_tiny__log_dir: '/var/log/acme-tiny'
 
 
-# .. envvar:: acme_tiny__log_file
-#
 # Log file for renewal process.
 acme_tiny__log_file: '{{ acme_tiny__log_dir }}/{{ acme_tiny__user_name }}.log'
 
 
-# .. envvar:: acme_tiny__private_key_length
-#
 # Length of the private key, in case new key is generated
 acme_tiny__key_length: 4096
 
-                                                                   # ]]]
-# Domain configuration [[[
-# ------------------------
 
-# .. envvar:: acme_tiny__domain
-#
+# Domain configuration
+# --------------------
+
 # Domain for which certificate is requested. Can be string or list.
 acme_tiny__domain: 'example.com'
 
 
-# .. envvar:: acme_tiny__file_name
-#
 # File name of key, certificate request and certificate (without ending).
 acme_tiny__cert_name: '{{ acme_tiny__domain[0]
                           if (acme_tiny__domain is iterable and not acme_tiny__domain is string)
                           else acme_tiny__domain }}'
 
 
-# .. envvar:: acme_tiny__cert_dir
-#
 # Directory name where key, certificate requtest and certificate are stored
 # for this domain.
 acme_tiny__cert_dir: '{{ acme_tiny__config_dir }}/{{ acme_tiny__cert_name }}'
 
 
-# .. envvar:: acme_tiny__private_key
-#
 # Private key used for certificate request. Will be generated if not existant.
 acme_tiny__private_key: '{{ acme_tiny__cert_dir }}/{{ acme_tiny__cert_name }}.key'
 
 
-# .. envvar:: acme_tiny__cert_request
-#
 # Certificate request. Will be generated if not existant.
 acme_tiny__cert_request: '{{ acme_tiny__cert_dir }}/{{ acme_tiny__cert_name }}.csr'
 
 
-# .. envvar:: acme_tiny__certificate
-#
 # Certificate which will be generated.
 acme_tiny__certificate: '{{ acme_tiny__cert_dir }}/{{ acme_tiny__cert_name }}.crt'
 
 
-# .. envvar:: acme_tiny__cert_type
-#
 # List of output certificate type(s). String or list. Can be one of ``plain``,
 # ``apache2``, ``dovecot``, ``httpd``, ``lighttpd``, ``postfix``.
 acme_tiny__cert_type: 'plain'
 
-                                                                   # ]]]
-# User configuration [[[
-# ----------------------
+
+# User configuration
+# ------------------
 
 # User account used for running acme-tiny
 
-# .. envvar:: acme_tiny__user_name
-#
 # User name.
 acme_tiny__user_name: 'certbot'
 
 
-# .. envvar:: acme_tiny__user_group
-#
 # Primary group of functional user.
 acme_tiny__user_group: '{{ acme_tiny__user_name }}'
 
 
-# .. envvar:: acme_tiny__user_home
-#
 # Home directory.
 acme_tiny__user_home: '/var/lib/acme-tiny'
 
-                                                                   # ]]]
-# Renewal setup [[[
-# -----------------
 
-# .. envvar:: acme_tiny__account_key
-#
+# Renewal setup
+# -------------
+
 # Account key.
 acme_tiny__account_key: 'account.key'
 
-                                                                   # ]]]
-                                                                   # ]]]
 ```
 
 
