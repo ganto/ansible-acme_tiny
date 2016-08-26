@@ -6,7 +6,7 @@
 [![Platforms](http://img.shields.io/badge/platforms-gentoo-lightgrey.svg?style=flat)](#)
 
 This [Ansible](https://ansible.com) role will setup and renew SSL certificates
-from the [Let's encrypt](https://letsencrypt.org) certificate authority with
+from the [Let's Encrypt](https://letsencrypt.org) certificate authority with
 help of the minimal [acme-tiny](https://github.com/diafygi/acme-tiny) Python
 client. It can be used to generate and send the initial certificate request as
 well as run by e.g. a cron job for regularly renewing the certificate and
@@ -19,12 +19,15 @@ restart the secured services after the certificate has been replaced.
 
 Either clone the role into your `roles/` directory:
 
-   # git clone https://github.com/ganto/ansible-acme_tiny /etc/ansible/roles/ganto.acme_tiny
+```bash
+git clone https://github.com/ganto/ansible-acme_tiny /etc/ansible/roles/ganto.acme_tiny
+```
 
 Or install it via `ansible-galaxy`:
 
-   # ansible-galaxy install ganto.acme_tiny
-
+```bash
+ansible-galaxy install ganto.acme_tiny
+```
 
 #### acme-tiny installation
 
@@ -38,7 +41,7 @@ Gentoo, checkout the related
 in my [linuxmonk-overlay](https://github.com/ganto/linuxmonk-overlay).
 
 
-#### Initial setup
+#### Account key
 
 Before you can run the role and send certificate requests, you need to generate
 an account key. This can be done with the official
@@ -56,11 +59,11 @@ a directory which has to be served on `http://<fqdn>/.well-known/acme-challenge`
 for every domain requested in the certificate. Make sure you add a corresponding
 definition in your Web server configuration.
 
-* *lighttpd*:
+* **lighttpd**:
 
-    alias.url += (
-        "/.well-known/acme-challenge/" => "/var/www/acme-challenges/",
-    )
+      alias.url += (
+          "/.well-known/acme-challenge/" => "/var/www/acme-challenges/",
+      )
 
 
 #### Example playbook
@@ -68,22 +71,24 @@ definition in your Web server configuration.
 A minimal playbook which would run the `ganto.acme_tiny` role to request a
 SSL certificate would looke like this:
 
-    ---
+```YAML
+---
 
-    - hosts: localhost
-      gather_facts: False
+- hosts: localhost
+  gather_facts: False
 
-      vars:
-        acme_tiny__domain: 'example.com'
-        acme_tiny__cert_type: 'lighttpd'
+  vars:
+    acme_tiny__domain: [ 'example.com', 'www.example.com' ]
+    acme_tiny__cert_type: 'lighttpd'
 
-      roles:
-        - role: ganto.acme_tiny
+  roles:
+    - role: ganto.acme_tiny
+```
 
 If you run this playbook with the `root` user it will create all necessary
-directories, create an unprivileged account for certificate renewal,
+directories, add an unprivileged account for certificate renewal,
 generate a private key, create and send a certificate request for the given
-domains, create the certificate file and eventually restart the affected
+domain(s), create the certificate file and eventually restart the affected
 service, in this case `lighttpd`.
 
 
@@ -94,8 +99,9 @@ certificate properties in a separate `vars/` file. After the initial setup,
 the following command which can be run with the dedicated `certbot` account
 will get you a new certificate:
 
-   $ ansible-playbook -e @vars/example.com.yml playbooks/acme_tiny.yml
-
+```bash
+ansible-playbook -e @vars/example.com.yml playbooks/acme_tiny.yml
+```
 
 ### Configuration
 
