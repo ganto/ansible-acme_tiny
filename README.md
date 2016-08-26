@@ -108,11 +108,24 @@ SSL certificate would looke like this:
     - role: ganto.acme_tiny
 ```
 
-If you run this playbook with the `root` user it will create all necessary
-directories, add an unprivileged account for certificate renewal,
-generate a private key, create and send a certificate request for the given
-domain(s), create the certificate file and eventually restart the affected
-service, in this case `lighttpd`.
+The first time you run the role for a new domain, `ansible` must be run with
+the `root` user to setup the necessary environment:
+
+* create configuration, challenge, domain, certificate directories
+
+* create unprivileged Linux account `certbot` for later certificate renewal
+
+* create `~certbot/.ansible.cfg` so that Ansible runs are logged to individual
+  log file `/var/log/acme-tiny/certbot.log`.
+
+* add sudo rule service restart by `certbot` account
+
+* create 4096 bit key and certificate request of the defined domains
+
+* creates a PEM certificate file and depending on the service an individual
+  service certificate file.
+
+* restart the service
 
 
 #### Certificate renewal
