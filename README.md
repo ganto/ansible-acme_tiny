@@ -59,11 +59,34 @@ a directory which has to be served on `http://<fqdn>/.well-known/acme-challenge`
 for every domain requested in the certificate. Make sure you add a corresponding
 definition in your Web server configuration.
 
-* **lighttpd**:
+* **Apache 2**:
 
-      alias.url += (
-          "/.well-known/acme-challenge/" => "/var/www/acme-challenges/",
-      )
+```apacheconf
+Alias /.well-known/acme-challenge/ /var/www/acme-challenges/
+<LocationMatch "/.well-known/acme-challenge/*">
+  Header set Content-Type "text/plain"
+</LocationMatch>
+```
+
+* **Nginx**:
+
+```
+location /.well-known/acme-challenge {
+    alias /var/www/acme-challenges;
+
+    location ~ /.well-known/acme-challenge/(.*) {
+        default_type text/plain;
+    }
+}
+```
+
+* **Lighttpd**:
+
+```
+alias.url += (
+    "/.well-known/acme-challenge/" => "/var/www/acme-challenges/",
+)
+```
 
 
 #### Example playbook
