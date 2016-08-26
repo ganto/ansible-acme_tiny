@@ -131,6 +131,18 @@
                   if acme_tiny__cert_type is iterable and not acme_tiny__cert_type is string
                   else [ acme_tiny__cert_type ] }}'
 
+- name: Certificate authority certificate link
+  file:
+    src: '{{ acme_tiny__config_dir }}/intermediate.crt'
+    path: '/etc/{{ item }}/ssl/ca.crt'
+    state: link
+    owner: 'root'
+    group: 'root'
+  when: item in [ 'apache2', 'httpd', 'lighttpd' ]
+  with_items: '{{ acme_tiny__cert_type
+                  if acme_tiny__cert_type is iterable and not acme_tiny__cert_type is string
+                  else [ acme_tiny__cert_type ] }}'
+
 - name: Sudo rule for service restart
   template:
     src: sudoers.d-rule.j2

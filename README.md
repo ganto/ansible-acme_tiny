@@ -167,6 +167,7 @@ E.g. for Lighttpd, this would look like this:
 
 ```txt
 /etc/lighttpd/ssl/example.com.crt -> /etc/ssl/acme-tiny/example.com/example.com_lighttpd.crt
+/etc/lighttpd/ssl/ca.crt -> /etc/ssl/acme-tiny/intermediate.crt
 ```
 
 Or for Dovecot:
