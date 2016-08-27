@@ -118,15 +118,27 @@
 - name: Service certificate links
   file:
     src: '{{ acme_tiny__certificate
-             if item in [ "apache2", "dovecot", "httpd", "nginx" ]
-             else acme_tiny__cert_dir + "/" + acme_tiny__cert_name + "_" + item + ".crt" }}'
+             if item in [ "dovecot" ]
+             else acme_tiny__cert_dir + "/" + acme_tiny__cert_name + "_chain.crt" }}'
     path: '/etc/{{ item }}/ssl/{{ acme_tiny__cert_name }}.crt'
     state: link
     owner: 'root'
     group: 'root'
     force: yes
-  when: item in [ 'apache2', 'dovecot', 'httpd', 'lighttpd', 'nginx',
-                  'postfix' ]
+  when: item in [ 'apache2', 'dovecot', 'httpd', 'nginx', 'postfix' ]
+  with_items: '{{ acme_tiny__cert_type
+                  if acme_tiny__cert_type is iterable and not acme_tiny__cert_type is string
+                  else [ acme_tiny__cert_type ] }}'
+
+- name: Service PEM file links
+  file:
+    src: '{{ acme_tiny__cert_dir + "/" + acme_tiny__cert_name + "_lighttpd.pem" }}'
+    path: '/etc/{{ item }}/ssl/{{ acme_tiny__cert_name }}.pem'
+    state: link
+    owner: 'root'
+    group: 'root'
+    force: yes
+  when: item in [ 'lighttpd' ]
   with_items: '{{ acme_tiny__cert_type
                   if acme_tiny__cert_type is iterable and not acme_tiny__cert_type is string
                   else [ acme_tiny__cert_type ] }}'

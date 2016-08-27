@@ -24,12 +24,12 @@
     mode: '0644'
 
 - block:
-    - name: Merge certificate/key for lighttpd
-      shell: 'cat {{ acme_tiny__private_key }} {{ acme_tiny__certificate }} > {{ acme_tiny__cert_dir }}/{{ acme_tiny__cert_name }}_lighttpd.crt'
+    - name: Merge certificate/key to PEM file
+      shell: 'cat {{ acme_tiny__private_key }} {{ acme_tiny__certificate }} > {{ acme_tiny__cert_dir }}/{{ acme_tiny__cert_name }}_lighttpd.pem'
 
-    - name: Fix lighttpd certificate permissions
+    - name: Fix PEM file permissions
       file:
-        path: '{{ acme_tiny__cert_dir }}/{{ acme_tiny__cert_name }}_lighttpd.crt'
+        path: '{{ acme_tiny__cert_dir }}/{{ acme_tiny__cert_name }}_lighttpd.pem'
         mode: '0600'
 
   become: True
@@ -37,19 +37,13 @@
   when: (acme_tiny__cert_type == 'lighttpd') or
         ('lighttpd' in acme_tiny__cert_type)
 
-- block:
-    - name: Create postfix certificate
-      shell: 'cat {{ acme_tiny__certificate }} {{ acme_tiny__config_dir }}/{intermediate.crt,ca.crt} > {{ acme_tiny__cert_dir }}/{{ acme_tiny__cert_name }}_postfix.crt'
-
-    - name: Fix postfix certificate permissions
-      file:
-        path: '{{ acme_tiny__cert_dir }}/{{ acme_tiny__cert_name }}_postfix.crt'
-        mode: '0644'
-
+- name: Merge certificate chain
   become: True
   become_user: '{{ acme_tiny__user_name }}'
-  when: (acme_tiny__cert_type == 'postfix') or
-        ('postfix' in acme_tiny__cert_type)
+  shell: 'cat {{ acme_tiny__certificate }} {{ acme_tiny__config_dir }}/{intermediate.crt,ca.crt} > {{ acme_tiny__cert_dir }}/{{ acme_tiny__cert_name }}_chain.crt'
+  when: ((acme_tiny__cert_type is string) and
+         (acme_tiny__cert_type in [ 'apache2', 'httpd', 'nginx', 'postfix', 'chain' ])) or
+        ((acme_tiny__cert_type | intersect([ 'apache2', 'httpd', 'nginx', 'postfix', 'chain' ])) | length > 0)
 
 - name: Restart service
   command: sudo -n /usr/bin/systemctl restart '{{ item }}'

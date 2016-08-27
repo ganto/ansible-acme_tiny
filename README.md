@@ -163,19 +163,30 @@ create a `ssl/` subdirectory from where the actual certificates and keys are
 symlinked. Like this the CA could be changed easily without reconfiguration
 of the secured services.
 
-E.g. for Lighttpd, this would look like this:
+With help of the `acme_tiny__cert_type` an appropriate service certificate
+will be assembled and symlinked.
+
+E.g. For for Apache httpd, this would look like this:
 
 ```txt
-/etc/lighttpd/ssl/example.com.crt -> /etc/ssl/acme-tiny/example.com/example.com_lighttpd.crt
+/etc/apache2/ssl/example.com.crt -> /etc/ssl/acme-tiny/example.com/example.com_chain.crt
+/etc/apache2/ssl/example.com.key -> /etc/ssl/acme-tiny/example.com/example.com.key
+```
+
+For Lighttpd:
+
+```txt
+/etc/lighttpd/ssl/example.com.pem -> /etc/ssl/acme-tiny/example.com/example.com_lighttpd.pem
 /etc/lighttpd/ssl/ca.crt -> /etc/ssl/acme-tiny/intermediate.crt
 ```
 
-Or for Dovecot:
+For Dovecot:
 
 ```txt
 /etc/postfix/ssl/example.com.crt -> /etc/ssl/acme-tiny/example.com/example.com.crt
 /etc/postfix/ssl/example.com.key -> /etc/ssl/acme-tiny/example.com/example.com.key
 ```
+
 
 #### Role variables
 
