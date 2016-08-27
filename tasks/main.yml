@@ -14,7 +14,9 @@
 
 - name: Show acme-tiny output
   debug: var=acme_tiny__register_certificate
-  failed_when: not acme_tiny__register_certificate.rc == 0
+  when: not ansible_check_mode|d()
+  failed_when: ("rc" in acme_tiny__register_certificate) and
+               (not acme_tiny__register_certificate.rc == 0)
 
 - name: Certificate permissions
   file:
