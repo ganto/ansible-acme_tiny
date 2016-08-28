@@ -40,7 +40,7 @@ source_suffix = '.rst'
 #source_encoding = 'utf-8-sig'
 
 # The master toctree document.
-master_doc = 'index1'
+master_doc = 'index'
 
 # General information about the project.
 project = u'ganto.acme_tiny'
@@ -196,7 +196,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-  ('index1', 'gantoacme_tiny.tex', u'ganto.acme\\_tiny Documentation',
+  ('index', 'gantoacme_tiny.tex', u'ganto.acme\\_tiny Documentation',
    u'Reto Gantenbein', 'manual'),
 ]
 
@@ -226,7 +226,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index1', 'gantoacme_tiny', u'ganto.acme_tiny Documentation',
+    ('index', 'gantoacme_tiny', u'ganto.acme_tiny Documentation',
      [u'Reto Gantenbein'], 1)
 ]
 
@@ -240,7 +240,7 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  ('index1', 'gantoacme_tiny', u'ganto.acme_tiny Documentation',
+  ('index', 'gantoacme_tiny', u'ganto.acme_tiny Documentation',
    u'Reto Gantenbein', 'gantoacme_tiny', 'One line description of project.',
    'Miscellaneous'),
 ]
