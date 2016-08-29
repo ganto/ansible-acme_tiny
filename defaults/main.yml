@@ -1,8 +1,8 @@
 ---
 # .. vim: foldmarker=[[[,]]]:foldmethod=marker
 
-# ganto.acme_tiny default variables [[[
-# =====================================
+# Default Role Variables [[[
+# ==========================
 
 # .. contents:: Sections
 #    :local:
@@ -86,7 +86,43 @@ acme_tiny__certificate: '{{ acme_tiny__cert_dir }}/{{ acme_tiny__cert_name }}.cr
 # .. envvar:: acme_tiny__cert_type
 #
 # List of output certificate type(s). String or list. Can be one of ``plain``,
-# ``apache2``, ``dovecot``, ``httpd``, ``lighttpd``, ``postfix``.
+# ``apache2``, ``chain``, ``dovecot``, ``httpd``, ``lighttpd``, ``nginx``,
+# ``postfix``.
+#
+# Parameter description:
+#
+# ``plain``
+#   Simply store the certificate under :envvar:`acme_tiny__certificate`.
+#
+# ``chain``
+#   Additionally generate a certificate file including the trust chain. The
+#   certificate chain will be stored in
+#   :file:`<acme-tiny-cert-dir>/<cert-name>_chain.crt` depending on the
+#   values of :envvar:`acme_tiny__cert_dir` and :envvar:`acme_tiny__cert_name`.
+#
+# ``apache2``/``httpd``
+#   Symlink private key and certificate chain from :file:`/etc/apache2/ssl` or
+#   :file:`/etc/httpd/ssl` respectively and restart the corresponding service
+#   after certificate update.
+#
+# ``dovecot``
+#   Symlink key and certificate from :file:`/etc/dovecot/ssl` and restart the
+#   ``dovecot`` service after certificate update.
+#
+# ``lighttpd``
+#   Create a PEM file including the RSA key and certificate, symlink it and
+#   the CA certificate from :file:`/etc/lighttpd/ssl` and restart the
+#   ``lighttpd`` service after certificate update.
+#
+# ``nginx``
+#   Symlink private key and certificate chain from :file:`/etc/nginx/ssl` and
+#   restart ``nginx`` service after certificate
+#   update.
+#
+# ``postfix``
+#   Symlink private key and certificate chain from :file:`/etc/postfix/ssl`
+#   and restart ``postfix`` service after certificate update.
+#
 acme_tiny__cert_type: 'plain'
 
                                                                    # ]]]
