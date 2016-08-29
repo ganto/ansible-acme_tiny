@@ -11,11 +11,32 @@ including service restart after the certificates have been replaced.
 Installation
 ~~~~~~~~~~~~
 
+Ansible Role
+^^^^^^^^^^^^
+
 This role requires at least Ansible ``v2.0.0``. To install it, run:
 
 .. code-block:: console
 
     ansible-galaxy install ganto.acme_tiny
+
+acme-tiny
+^^^^^^^^^
+
+As there are different ways to setup ``acme-tiny`` on the various distributions
+this task is not covered by this Ansible role. It has to be done manually
+prior to running the role.
+
+For Gentoo users the role author provides an `acme-tiny ebuild
+<https://github.com/ganto/linuxmonk-overlay/tree/master/app-crypt/acme-tiny>`_
+in the `linuxmonk-overlay <https://github.com/ganto/linuxmonk-overlay>`_.
+
+If there is no package provided by the distribution of your choice, it can
+also be installed from `PyPi <https://pypi.python.org/pypi/acme-tiny>`_.
+
+.. code-block:: console
+
+    pip install acme-tiny
 
 ..
  Local Variables:
