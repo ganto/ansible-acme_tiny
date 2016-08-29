@@ -5,6 +5,7 @@ Ansible role: ganto.acme_tiny
    :maxdepth: 2
 
    introduction
+   getting-started
    copyright
 
 ..
