@@ -71,6 +71,36 @@ server configuration.
         "/.well-known/acme-challenge/" => "/var/www/acme-challenges/",
     )
 
+
+Example playbook
+----------------
+
+A minimal playbook which would run the ``ganto.acme_tiny`` role to request a
+SSL certificate would looke like this:
+
+.. literalinclude:: playbooks/acme_tiny.yml
+   :language: yaml
+
+
+Example inventory
+-----------------
+
+When using the `example playbook`_ the host to run the role has to be added
+to the ``[acme_tiny]`` host group in the Ansible inventory::
+
+    [acme_tiny]
+    hostname
+
+Obviously, the :doc:`defaults` might not be suitable for everybody. Especially
+the :envvar:`acme_tiny__domain` variable is likely to be defined individually.
+This can be done via host variables in
+:file:`/etc/ansible/host_vars/<hostname>/acme_tiny.yml`.
+
+If there are multiple certificates that should be managed with this Ansible
+role the individual configurations would be defined in separate "domain"
+files (e.g. :file:`/etc/ansible/vars/<domain>.yml`) and then passed with the
+Ansible ``--extra-vars`` argument to the playbook run.
+
 ..
  Local Variables:
  mode: rst
