@@ -7,6 +7,7 @@ Ansible role: ganto.acme_tiny
    introduction
    getting-started
    defaults
+   system-configuration
    copyright
 
 ..

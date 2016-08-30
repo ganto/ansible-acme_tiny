@@ -8,8 +8,13 @@ automates the creation of certificate requests and renewal of certificates,
 including service restart after the certificates have been replaced.
 
 
+.. _acme_tiny_installation:
+
 Installation
 ~~~~~~~~~~~~
+
+
+.. _acme_tiny_ansible_role:
 
 Ansible Role
 ^^^^^^^^^^^^
@@ -19,6 +24,9 @@ This role requires at least Ansible ``v2.0.0``. To install it, run:
 .. code-block:: console
 
     ansible-galaxy install ganto.acme_tiny
+
+
+.. _acme_tiny_upstream:
 
 acme-tiny
 ^^^^^^^^^
