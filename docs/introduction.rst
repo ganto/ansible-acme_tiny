@@ -23,9 +23,9 @@ This role requires at least Ansible ``v2.0.0``. To install it, run:
 acme-tiny
 ^^^^^^^^^
 
-As there are different ways to setup ``acme-tiny`` on the various distributions
-this task is not covered by this Ansible role. It has to be done manually
-prior to running the role.
+As there are different ways to setup :program:`acme-tiny` on the various
+distributions this task is not covered by the Ansible role. It has to be done
+manually prior to running the role.
 
 For Gentoo users the role author provides an `acme-tiny ebuild
 <https://github.com/ganto/linuxmonk-overlay/tree/master/app-crypt/acme-tiny>`_

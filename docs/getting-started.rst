@@ -18,8 +18,13 @@ There are two "modes" how this role can be run:
   for the service restart. Role has to be run with ``root`` privileges. 
 
 
+.. _acme_tiny_ref_prerequisites:
+
 Prerequisites
 -------------
+
+
+.. _acme_tiny_ref_account_key:
 
 Let's Encrypt Account Key
 ^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -33,14 +38,20 @@ Encrypt key <https://github.com/diafygi/acme-tiny#use-existing-lets-encrypt-key>
 Eventually store the account key in :file:`/etc/ssl/acme-tiny/account.key`.
 
 
+.. _acme_tiny_ref_web_server_config:
+
 Web Server Configuration
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
 When requesting the certificate :program:`acme-tiny` will place a challenge
 file in :file:`/var/www/acme-challenges` which has to be accessible through
 ``http://<fqdn>/.well-known/acme-challenge`` for every domain requested in
-the certificate. Make sure you add a corresponding definition in your Web
-server configuration.
+the certificate. Make sure to point the DNS entry of the domain name
+configured onto the system running this role and to add a corresponding
+definition in your Web server configuration.
+
+The following snippets are meant as an example. Depending on the Web server
+configuration they need to be slightly adjusted.
 
 **Apache 2**
 
@@ -72,6 +83,8 @@ server configuration.
     )
 
 
+.. _acme_tiny_ref_example_playbook:
+
 Example playbook
 ----------------
 
@@ -81,6 +94,8 @@ SSL certificate would looke like this:
 .. literalinclude:: playbooks/acme_tiny.yml
    :language: yaml
 
+
+.. _acme_tiny_ref_example_inventory:
 
 Example inventory
 -----------------
@@ -92,14 +107,14 @@ to the ``[acme_tiny]`` host group in the Ansible inventory::
     hostname
 
 Obviously, the :doc:`defaults` might not be suitable for everybody. Especially
-the :envvar:`acme_tiny__domain` variable is likely to be defined individually.
-This can be done via host variables in
+the :envvar:`acme_tiny__domain` variable needs to be defined individually.
+This can be done via Ansible host variables in
 :file:`/etc/ansible/host_vars/<hostname>/acme_tiny.yml`.
 
 If there are multiple certificates that should be managed with this Ansible
-role the individual configurations would be defined in separate "domain"
+role, the individual configurations could be defined in separate "domain"
 files (e.g. :file:`/etc/ansible/vars/<domain>.yml`) and then passed with the
-Ansible ``--extra-vars`` argument to the playbook run.
+Ansible ``--extra-vars`` argument to the playbook execution.
 
 ..
  Local Variables:
