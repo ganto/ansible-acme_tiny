@@ -116,6 +116,18 @@ role, the individual configurations could be defined in separate "domain"
 files (e.g. :file:`/etc/ansible/vars/<domain>.yml`) and then passed with the
 Ansible ``--extra-vars`` argument to the playbook execution.
 
+Such a variable file would look like this:
+
+.. code-block:: yaml
+
+    ---
+    #
+    # acme_tiny role configuration for: mydomain.com
+    #
+
+    acme_tiny__domain: [ 'mydomain.com', 'www.mydomain.com' ]
+    acme_tiny__cert_type: 'nginx'
+
 ..
  Local Variables:
  mode: rst

@@ -134,6 +134,22 @@ Postfix
 Certificate renewal
 -------------------
 
+After adding a new domain the role has to be run once with ``root``
+privileges. Among other things this will create a separate user account
+``certbot`` which can be used to schedule unattended certificate renewals.
+
+.. note:: See :ref:`acme_tiny_ref_example_inventory` for an example how to
+          create a role configuration.
+
+Here an example of a :program:`cron` job (:file:`/etc/cron.d/acme-tiny`)
+which whould renew the certificate every month:
+
+.. code-block:: console
+
+    PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+
+    @monthly certbot /usr/bin/ansible-playbook -e @/etc/ansible/vars/mydomain.com.yml /etc/ansible/playbooks/acme_tiny.yml >/dev/null
+
 ..
  Local Variables:
  mode: rst
