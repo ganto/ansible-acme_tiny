@@ -64,7 +64,7 @@ configuration they need to be slightly adjusted.
 
 **Nginx**
 
-.. code-block:: nginxconf
+.. code-block:: nginx
 
     location /.well-known/acme-challenge {
         alias /var/www/acme-challenges;
@@ -76,7 +76,7 @@ configuration they need to be slightly adjusted.
 
 **Lighttpd**
 
-.. code-block:: lighttpdconf
+.. code-block:: lighty
 
     alias.url += (
         "/.well-known/acme-challenge/" => "/var/www/acme-challenges/",

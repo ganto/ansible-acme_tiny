@@ -78,7 +78,7 @@ Apache httpd
 Dovecot
 ~~~~~~~
 
-.. code-block:: dovecotconf
+.. code-block:: dovecot
 
     ssl_cert = </etc/dovecot/ssl/example.com.crt
     ssl_key  = </etc/dovecot/ssl/example.com.key
@@ -92,7 +92,7 @@ Dovecot
 Lighttpd
 ~~~~~~~~
 
-.. code-block:: lighttpdconf
+.. code-block:: lighty
 
     ssl.pemfile /etc/lighttpd/ssl/example.com.pem
     ssl.cafile  /etc/lighttpd/ssl/ca.crt
@@ -106,7 +106,7 @@ Lighttpd
 Nginx
 ~~~~~
 
-.. code-block:: nginxconf
+.. code-block:: nginx
 
     ssl_certificate     /etc/nginx/ssl/example.com.crt
     ssl_certificate_key /etc/nginx/ssl/example.com.key
@@ -120,7 +120,7 @@ Nginx
 Postfix
 ~~~~~~~
 
-.. code-block:: postfixconf
+.. code-block:: postfix
 
     smtpd_tls_cert_file = /etc/nginx/ssl/example.com.crt
     smtpd_tls_key_file  = /etc/nginx/ssl/example.com.key
