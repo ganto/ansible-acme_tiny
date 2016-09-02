@@ -1,5 +1,8 @@
 ## acme_tiny
 
+[![Travis CI](http://img.shields.io/travis/ganto/ansible-acme_tiny.svg?style=flat)](https://travis-ci.org/ganto/ansible-acme_tiny)
+[![test-suite](http://img.shields.io/badge/test--suite-ansible--acme__tiny-blue.svg?style=flat)](https://github.com/ganto/ansible-acme_tiny-test/)
+[![Ansible Galaxy](http://img.shields.io/badge/galaxy-ganto.acme_tiny-660198.svg?style=flat)](https://galaxy.ansible.com/ganto/acme_tiny/)
 [![Platforms](http://img.shields.io/badge/platforms-gentoo-lightgrey.svg?style=flat)](#)
 
 This [Ansible](https://ansible.com) role will setup and renew SSL certificates
