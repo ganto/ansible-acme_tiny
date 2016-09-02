@@ -1,7 +1,7 @@
 System configuration
 ====================
 
-.. _acme_tiny_ref_fs_layout
+.. _acme_tiny_ref_fs_layout:
 
 File system layout
 ------------------
@@ -21,7 +21,7 @@ Server path                                             Ansible role variable
 :file:`/etc/ssl/acme-tiny/example.com/example.com.crt`  :envvar:`acme_tiny__certificate`
 ======================================================= ==================================
 
-When setting a :envvar:`acme_tiny_cert_type` other than ``plain`` or ``chain``
+When setting a :envvar:`acme_tiny__cert_type` other than ``plain`` or ``chain``
 an additional layer of indirection through symlinks which will make the
 certificates accessible in a transparent way. For each service the role will
 create a :file:`ssl/` subdirectory from where the actual certificates and keys
@@ -44,7 +44,7 @@ For :program:`Dovecot`::
     /etc/dovecot/ssl/example.com.key -> /etc/ssl/acme-tiny/example.com/example.com.key
 
 
-.. _acme_tiny_ref_service_cfg
+.. _acme_tiny_ref_service_cfg:
 
 Service configuration
 ---------------------
@@ -59,7 +59,7 @@ new target.
           files has to be done manually.
 
 
-.. _acme_tiny_ref_apache_cfg
+.. _acme_tiny_ref_apache_cfg:
 
 Apache httpd
 ~~~~~~~~~~~~
@@ -73,12 +73,12 @@ Apache httpd
   `Apache Module mod_ssl <https://httpd.apache.org/docs/2.4/mod/mod_ssl.html>`_
 
 
-.. _acme_tiny_ref_dovecot_cfg
+.. _acme_tiny_ref_dovecot_cfg:
 
 Dovecot
 ~~~~~~~
 
-.. code-block:: dovecot
+.. code-block:: text
 
     ssl_cert = </etc/dovecot/ssl/example.com.crt
     ssl_key  = </etc/dovecot/ssl/example.com.key
@@ -87,7 +87,7 @@ Dovecot
   `Dovecot Wiki: SSL <http://wiki.dovecot.org/SSL>`_
 
 
-.. _acme_tiny_ref_lighttpd
+.. _acme_tiny_ref_lighttpd:
 
 Lighttpd
 ~~~~~~~~
@@ -101,7 +101,7 @@ Lighttpd
   `Lighttpd Wiki: Secure HTTP <http://redmine.lighttpd.net/projects/lighttpd/wiki/Docs_SSL>`_
 
 
-.. _acme_tiny_ref_nginx
+.. _acme_tiny_ref_nginx:
 
 Nginx
 ~~~~~
@@ -115,12 +115,12 @@ Nginx
   `Module ngx_http_ssl_module <http://nginx.org/en/docs/http/ngx_http_ssl_module.html>`_
 
 
-.. _acme_tiny_ref_postfix 
+.. _acme_tiny_ref_postfix:
 
 Postfix
 ~~~~~~~
 
-.. code-block:: postfix
+.. code-block:: text
 
     smtpd_tls_cert_file = /etc/nginx/ssl/example.com.crt
     smtpd_tls_key_file  = /etc/nginx/ssl/example.com.key
@@ -129,7 +129,7 @@ Postfix
   `Postfix TLS Support <http://www.postfix.org/TLS_README.html>`_
 
 
-.. _acme_tiny_ref_cert_renewal
+.. _acme_tiny_ref_cert_renewal:
 
 Certificate renewal
 -------------------
@@ -144,7 +144,7 @@ privileges. Among other things this will create a separate user account
 Here an example of a :program:`cron` job (:file:`/etc/cron.d/acme-tiny`)
 which whould renew the certificate every month:
 
-.. code-block:: console
+.. code-block:: shell
 
     PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 
