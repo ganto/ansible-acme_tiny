@@ -9,6 +9,7 @@ Ansible role: ganto.acme_tiny
    defaults
    system-configuration
    copyright
+   changelog
 
 ..
  Local Variables:
