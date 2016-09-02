@@ -1,5 +1,10 @@
 ---
 
+- name: Certificate renewal group
+  group:
+    name: '{{ acme_tiny__user_group }}'
+    system: True
+
 - name: Certificate renewal user
   user:
     name: '{{ acme_tiny__user_name }}'
