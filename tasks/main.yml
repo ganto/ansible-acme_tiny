@@ -50,7 +50,8 @@
 - name: Restart service
   command: sudo -n /usr/bin/systemctl restart '{{ item }}'
   register: acme_tiny__register_service_restart
-  when: acme_tiny__register_certificate | changed
+  when: (acme_tiny__register_certificate | changed) and
+        (item not in [ "plain", "chain" ])
   with_items: '{{ acme_tiny__cert_type
                   if acme_tiny__cert_type is iterable and not acme_tiny__cert_type is string
                   else [ acme_tiny__cert_type ] }}'
