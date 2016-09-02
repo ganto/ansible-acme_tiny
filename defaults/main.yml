@@ -1,8 +1,8 @@
 ---
 # .. vim: foldmarker=[[[,]]]:foldmethod=marker
 
-# ganto.acme_tiny default variables [[[
-# =====================================
+# Default role variables [[[
+# ==========================
 
 # .. contents:: Sections
 #    :local:
@@ -12,7 +12,7 @@
 
 # .. envvar:: acme_tiny__config_dir
 #
-# Configuration base directory
+# :program:`acme-tiny` configuration base directory.
 acme_tiny__config_dir: '/etc/ssl/acme-tiny'
 
 
@@ -23,22 +23,12 @@ acme_tiny__config_dir: '/etc/ssl/acme-tiny'
 acme_tiny__challenge_dir: '/var/www/acme-challenges'
 
 
-# .. envvar:: acme_tiny__log_dir
+# .. envvar:: acme_tiny__account_key
 #
-# Log directory.
-acme_tiny__log_dir: '/var/log/acme-tiny'
-
-
-# .. envvar:: acme_tiny__log_file
-#
-# Log file for renewal process.
-acme_tiny__log_file: '{{ acme_tiny__log_dir }}/{{ acme_tiny__user_name }}.log'
-
-
-# .. envvar:: acme_tiny__private_key_length
-#
-# Length of the private key, in case new key is generated
-acme_tiny__key_length: 4096
+# File name of the Let's encrypt account key relative to the
+# :envvar:`acme_tiny__config_dir`. For more information see
+# :ref:`acme_tiny_ref_account_key`.
+acme_tiny__account_key: 'account.key'
 
                                                                    # ]]]
 # Domain configuration [[[
@@ -46,13 +36,16 @@ acme_tiny__key_length: 4096
 
 # .. envvar:: acme_tiny__domain
 #
-# Domain for which certificate is requested. Can be string or list.
+# Domain for which certificate is requested. Value can be a single domain or
+# a list of domain names (e.g. ``[ 'example.com', 'www.example.com' ]``)
 acme_tiny__domain: 'example.com'
 
 
-# .. envvar:: acme_tiny__file_name
+# .. envvar:: acme_tiny__cert_name
 #
-# File name of key, certificate request and certificate (without ending).
+# File name of key, certificate request and certificate (without file
+# extension). By default this will be set to the (first) domain name defined
+# in :envvar:`acme_tiny__domain`.
 acme_tiny__cert_name: '{{ acme_tiny__domain[0]
                           if (acme_tiny__domain is iterable and not acme_tiny__domain is string)
                           else acme_tiny__domain }}'
@@ -60,40 +53,87 @@ acme_tiny__cert_name: '{{ acme_tiny__domain[0]
 
 # .. envvar:: acme_tiny__cert_dir
 #
-# Directory name where key, certificate requtest and certificate are stored
+# Directory name where key, certificate request and certificate are stored
 # for this domain.
 acme_tiny__cert_dir: '{{ acme_tiny__config_dir }}/{{ acme_tiny__cert_name }}'
 
 
 # .. envvar:: acme_tiny__private_key
 #
-# Private key used for certificate request. Will be generated if not existant.
+# File name of the RSA key used for generating the certificate request. If key
+# doesn't exist yet, a RSA key of :envvar:`acme_tiny__key_length` bit will be
+# generated under this name.
 acme_tiny__private_key: '{{ acme_tiny__cert_dir }}/{{ acme_tiny__cert_name }}.key'
+
+
+# .. envvar:: acme_tiny__key_length
+#
+# Length in bit of the RSA key.
+acme_tiny__key_length: 4096
 
 
 # .. envvar:: acme_tiny__cert_request
 #
-# Certificate request. Will be generated if not existant.
+# File name of the certificate request sent to the Let's Encrypt certificate
+# service. The certificate request will be generated using
+# :envvar:`acme_tiny__domain` if not existent.
 acme_tiny__cert_request: '{{ acme_tiny__cert_dir }}/{{ acme_tiny__cert_name }}.csr'
 
 
 # .. envvar:: acme_tiny__certificate
 #
-# Certificate which will be generated.
+# File name of certificate which will be retrieved from the Let's Encrypt
+# certificate authority.
 acme_tiny__certificate: '{{ acme_tiny__cert_dir }}/{{ acme_tiny__cert_name }}.crt'
 
 
 # .. envvar:: acme_tiny__cert_type
 #
 # List of output certificate type(s). String or list. Can be one of ``plain``,
-# ``apache2``, ``dovecot``, ``httpd``, ``lighttpd``, ``postfix``.
+# ``apache2``, ``chain``, ``dovecot``, ``httpd``, ``lighttpd``, ``nginx``,
+# ``postfix``.
+#
+# Parameter description:
+#
+# ``plain``
+#   Simply store the certificate under :envvar:`acme_tiny__certificate`.
+#
+# ``chain``
+#   Additionally generate a certificate file including the trust chain. The
+#   certificate chain will be stored in
+#   :file:`<acme-tiny-cert-dir>/<cert-name>_chain.crt` depending on the
+#   values of :envvar:`acme_tiny__cert_dir` and :envvar:`acme_tiny__cert_name`.
+#
+# ``apache2``/``httpd``
+#   Symlink private key and certificate chain from :file:`/etc/apache2/ssl` or
+#   :file:`/etc/httpd/ssl` respectively and restart the corresponding service
+#   after certificate update.
+#
+# ``dovecot``
+#   Symlink key and certificate from :file:`/etc/dovecot/ssl` and restart the
+#   ``dovecot`` service after certificate update.
+#
+# ``lighttpd``
+#   Create a PEM file including the RSA key and certificate, symlink it and
+#   the CA certificate from :file:`/etc/lighttpd/ssl` and restart the
+#   ``lighttpd`` service after certificate update.
+#
+# ``nginx``
+#   Symlink private key and certificate chain from :file:`/etc/nginx/ssl` and
+#   restart ``nginx`` service after certificate
+#   update.
+#
+# ``postfix``
+#   Symlink private key and certificate chain from :file:`/etc/postfix/ssl`
+#   and restart ``postfix`` service after certificate update.
+#
 acme_tiny__cert_type: 'plain'
 
                                                                    # ]]]
 # User configuration [[[
 # ----------------------
 
-# User account used for running acme-tiny
+# User account meant for running certificate renewal via this Ansible role.
 
 # .. envvar:: acme_tiny__user_name
 #
@@ -103,7 +143,7 @@ acme_tiny__user_name: 'certbot'
 
 # .. envvar:: acme_tiny__user_group
 #
-# Primary group of functional user.
+# Primary group of the functional user.
 acme_tiny__user_group: '{{ acme_tiny__user_name }}'
 
 
@@ -112,14 +152,17 @@ acme_tiny__user_group: '{{ acme_tiny__user_name }}'
 # Home directory.
 acme_tiny__user_home: '/var/lib/acme-tiny'
 
-                                                                   # ]]]
-# Renewal setup [[[
-# -----------------
 
-# .. envvar:: acme_tiny__account_key
+# .. envvar:: acme_tiny__log_dir
 #
-# Account key.
-acme_tiny__account_key: 'account.key'
+# Log directory owned by :envvar:`acme_tiny__user_name`.
+acme_tiny__log_dir: '/var/log/acme-tiny'
+
+
+# .. envvar:: acme_tiny__log_file
+#
+# Log file defined in :file:`~/.ansible.cfg` of :envvar:`acme_tiny__user_name`.
+acme_tiny__log_file: '{{ acme_tiny__log_dir }}/{{ acme_tiny__user_name }}.log'
 
                                                                    # ]]]
                                                                    # ]]]
