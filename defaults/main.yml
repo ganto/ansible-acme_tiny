@@ -138,7 +138,7 @@ acme_tiny__cert_type: 'plain'
 # .. envvar:: acme_tiny__user_name
 #
 # User name.
-acme_tiny__user_name: 'certbot'
+acme_tiny__user_name: 'acmetiny'
 
 
 # .. envvar:: acme_tiny__user_group
