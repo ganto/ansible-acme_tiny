@@ -9,7 +9,7 @@ There are two "modes" how this role can be run:
 - *Scheduler mode*: Role will request new certificate based on an existing
   certificate request, replace the old certificate and restart the affected
   service. Ansible should be run with dedicated minimally privileged user
-  account (by default ``certbot``).
+  account (by default ``acmetiny``).
 
 - *Setup mode*: Role will run the initial setup for a new domain certificate
   such as create required directories, generate RSA key and certificate
