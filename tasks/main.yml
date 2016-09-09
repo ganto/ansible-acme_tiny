@@ -27,31 +27,38 @@
 
 - block:
     - name: Merge certificate/key to PEM file
-      shell: 'cat {{ acme_tiny__private_key }} {{ acme_tiny__certificate }} > {{ acme_tiny__cert_dir }}/{{ acme_tiny__cert_name }}_lighttpd.pem'
+      shell: 'cat {{ acme_tiny__private_key }} {{ acme_tiny__certificate }} > {{ acme_tiny__cert_dir }}/{{ acme_tiny__cert_name }}_keycert.pem'
 
     - name: Fix PEM file permissions
       file:
-        path: '{{ acme_tiny__cert_dir }}/{{ acme_tiny__cert_name }}_lighttpd.pem'
+        path: '{{ acme_tiny__cert_dir }}/{{ acme_tiny__cert_name }}_keycert.pem'
         mode: '0600'
 
   become: True
   become_user: '{{ acme_tiny__user_name }}'
-  when: (acme_tiny__cert_type == 'lighttpd') or
-        ('lighttpd' in acme_tiny__cert_type)
+  when: (item in acme_tiny__service_map|d({})) and
+        ("cert_format" in acme_tiny__service_map[item]) and
+        (not acme_tiny__service_map[item].cert_format == "keycert")
+  with_items: '{{ acme_tiny__service
+                  if acme_tiny__service is iterable and not acme_tiny__service is string
+                  else [ acme_tiny__service ] }}'
 
 - name: Merge certificate chain
   become: True
   become_user: '{{ acme_tiny__user_name }}'
   shell: 'cat {{ acme_tiny__certificate }} {{ acme_tiny__config_dir }}/{intermediate.crt,ca.crt} > {{ acme_tiny__cert_dir }}/{{ acme_tiny__cert_name }}_chain.crt'
-  when: ((acme_tiny__cert_type is string) and
-         (acme_tiny__cert_type in [ 'apache2', 'httpd', 'nginx', 'postfix', 'chain' ])) or
-        ((acme_tiny__cert_type | intersect([ 'apache2', 'httpd', 'nginx', 'postfix', 'chain' ])) | length > 0)
+  when: (item in acme_tiny__service_map|d({})) and
+        ("cert_format" in acme_tiny__service_map[item]) and
+        (not acme_tiny__service_map[item].cert_format == "chain")
+  with_items: '{{ acme_tiny__service
+                  if acme_tiny__service is iterable and not acme_tiny__service is string
+                  else [ acme_tiny__service ] }}'
 
 - name: Restart service
   command: sudo -n /usr/bin/systemctl restart '{{ item }}'
   register: acme_tiny__register_service_restart
   when: (acme_tiny__register_certificate | changed) and
-        (item not in [ "plain", "chain" ])
-  with_items: '{{ acme_tiny__cert_type
-                  if acme_tiny__cert_type is iterable and not acme_tiny__cert_type is string
-                  else [ acme_tiny__cert_type ] }}'
+        (acme_tiny__service_restart|d(True))
+  with_items: '{{ acme_tiny__service
+                  if acme_tiny__service is iterable and not acme_tiny__service is string
+                  else [ acme_tiny__service ] }}'

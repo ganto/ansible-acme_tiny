@@ -1,0 +1,78 @@
+---
+
+- name: Service SSL directory
+  file:
+    path: '{{ acme_tiny__service_map[item].cert_dir
+              if "cert_dir" in acme_tiny__service_map[item]
+              else "/etc/{{ item }}/ssl" }}'
+    state: directory
+    owner: 'root'
+    group: 'root'
+    mode: '0755'
+    when: item in acme_tiny__service_map|d({})
+  with_items: '{{ acme_tiny__service
+                  if acme_tiny__service is iterable and not acme_tiny__service is string
+                  else [ acme_tiny__service ] }}'
+
+- name: Domain key links
+  file:
+    src: '{{ acme_tiny__private_key }}'
+    path: '{{ acme_tiny__service_map[item].cert_dir
+              if "cert_dir" in acme_tiny__service_map[item]
+              else "/etc/{{ item }}/ssl" }}/{{ acme_tiny__cert_name }}.key'
+    state: link
+    owner: 'root'
+    group: 'root'
+    force: yes
+  when: (item in acme_tiny__service_map|d({})) and
+        ("cert_format" in acme_tiny__service_map[item]) and
+        (not acme_tiny__service_map[item].cert_format == "keycert")
+  with_items: '{{ acme_tiny__service
+                  if acme_tiny__service is iterable and not acme_tiny__service is string
+                  else [ acme_tiny__service ] }}'
+
+- name: Service certificate links
+  file:
+    src: '{{ acme_tiny__certificate }}'
+    path: '{{ acme_tiny__service_map[item].cert_dir
+              if "cert_dir" in acme_tiny__service_map[item]
+              else "/etc/{{ item }}/ssl" }}/{{ acme_tiny__cert_name }}.crt'
+    state: link
+    owner: 'root'
+    group: 'root'
+    force: yes
+  when: (item in acme_tiny__service_map|d({})) and
+        ("cert_format" in acme_tiny__service_map[item]) and
+        (acme_tiny__service_map[item].cert_format == "plain")
+  with_items: '{{ acme_tiny__service
+                  if acme_tiny__service is iterable and not acme_tiny__service is string
+                  else [ acme_tiny__service ] }}'
+
+- name: Service certificate chain links
+  file:
+    src: '{{ acme_tiny__certificate }}_chain.crt'
+    path: '/etc/{{ item }}/ssl/{{ acme_tiny__cert_name }}.crt'
+    state: link
+    owner: 'root'
+    group: 'root'
+    force: yes
+  when: (item in acme_tiny__service_map|d({})) and
+        ("cert_format" in acme_tiny__service_map[item]) and
+        (not acme_tiny__service_map[item].cert_format == "chain")
+  with_items: '{{ acme_tiny__service
+                  if acme_tiny__service is iterable and not acme_tiny__service is string
+                  else [ acme_tiny__service ] }}'
+
+- name: Service PEM file links
+  file:
+    src: '{{ acme_tiny__cert_dir + "/" + acme_tiny__cert_name + "_keycert.pem" }}'
+    path: '/etc/{{ item }}/ssl/{{ acme_tiny__cert_name }}.pem'
+    state: link
+    owner: 'root'
+    group: 'root'
+  when: (item in acme_tiny__service_map|d({})) and
+        ("cert_format" in acme_tiny__service_map[item]) and
+        (not acme_tiny__service_map[item].cert_format == "keycert")
+  with_items: '{{ acme_tiny__service
+                  if acme_tiny__service is iterable and not acme_tiny__service is string
+                  else [ acme_tiny__service ] }}'
