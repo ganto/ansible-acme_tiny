@@ -25,23 +25,23 @@
     group: '{{ acme_tiny__user_group }}'
     mode: '0644'
 
-- block:
-    - name: Merge certificate/key to PEM file
-      shell: 'cat {{ acme_tiny__private_key }} {{ acme_tiny__certificate }} > {{ acme_tiny__cert_dir }}/{{ acme_tiny__cert_name }}_keycert.pem'
-
-    - name: Fix PEM file permissions
-      file:
-        path: '{{ acme_tiny__cert_dir }}/{{ acme_tiny__cert_name }}_keycert.pem'
-        mode: '0600'
-
+- name: Merge certificate/key to PEM file
   become: True
   become_user: '{{ acme_tiny__user_name }}'
+  shell: 'cat {{ acme_tiny__private_key }} {{ acme_tiny__certificate }} > {{ acme_tiny__cert_dir }}/{{ acme_tiny__cert_name }}_keycert.pem'
+  register: acme_tiny__register_keycert
   when: (item in acme_tiny__service_map|d({})) and
         ("cert_format" in acme_tiny__service_map[item]) and
         (not acme_tiny__service_map[item].cert_format == "keycert")
   with_items: '{{ acme_tiny__service
                   if acme_tiny__service is iterable and not acme_tiny__service is string
                   else [ acme_tiny__service ] }}'
+
+- name: Fix PEM file permissions
+  file:
+    path: '{{ acme_tiny__cert_dir }}/{{ acme_tiny__cert_name }}_keycert.pem'
+    mode: '0600'
+  when: acme_tiny__register_keycert|changed
 
 - name: Merge certificate chain
   become: True
