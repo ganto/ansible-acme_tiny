@@ -57,7 +57,8 @@
 - name: Restart service
   command: sudo -n /usr/bin/systemctl restart '{{ item }}'
   register: acme_tiny__register_service_restart
-  when: (acme_tiny__register_certificate | changed) and
+  when: (item | length > 0) and
+        (acme_tiny__register_certificate | changed) and
         (acme_tiny__service_restart|d(True))
   with_items: '{{ acme_tiny__service
                   if acme_tiny__service is iterable and not acme_tiny__service is string
