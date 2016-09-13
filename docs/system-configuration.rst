@@ -136,20 +136,20 @@ overwritten from the Ansible inventory to extend the definition with a new
 service or adjust the current behaviour. Each element has the service
 name as key and needs to define the following properties:
 
-`cert_format`
- Certificate format. See :envvar:`acme_tiny__cert_format` for valid
- options.
+``cert_format``
+  Certificate format. See :envvar:`acme_tiny__cert_format` for valid
+  options.
 
-`cert_directory`
- Custom directory from where the certificate and key will be symlinked.
- See ref:`acme_tiny_ref_fs_layout` for more details.
+``cert_directory``
+  Custom directory from where the certificate and key will be symlinked.
+  See :ref:`acme_tiny_ref_fs_layout` for more details.
 
-`service_name`
- Name of the service which needs to be restarted after certificate renewal.
+``service_name``
+  Name of the service which needs to be restarted after certificate renewal.
 
 *Example*
 
-Custom inventory definition for `Pound <http://www.apsis.ch/pound>`:
+Custom Ansible inventory definition for `Pound <http://www.apsis.ch/pound>`_:
 
 .. code-block:: yaml
 

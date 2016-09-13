@@ -140,9 +140,10 @@ acme_tiny__service_restart: True
 # .. envvar:: acme_tiny__cert_format
 #
 # Certificate format. By default the format will be determined by the service
-# name (see :envvar:`acme_tiny__service_map`). The value must be one of
-# ``plain``, ``chain`` or ``keycert``. If :envvar:`acme_tiny__service` is
-# undefined or empty the format will be ``plain``.
+# name which will lookup the value from ``item.cert_format`` in
+# :envvar:`acme_tiny__service_map`. The value must be one of ``plain``,
+# ``chain`` or ``keycert``. If :envvar:`acme_tiny__service` is undefined or
+# empty the format will be ``plain``.
 #
 # Parameter description:
 #
@@ -173,7 +174,7 @@ acme_tiny__cert_format: '{{ acme_tiny__service_map[acme_tiny__service].cert_form
 # .. envvar:: acme_tiny__cert_symlink
 #
 # Create symlinks from the service configuration directory
-# (``item.cert_directory`` defined in :envvar:`acme_tiny__service_map` to the
+# (``item.cert_directory``) defined in :envvar:`acme_tiny__service_map` to the
 # actual RSA key and certificate in :envvar:`acme_tiny__cert_dir`.
 acme_tiny__cert_symlink: True
 
