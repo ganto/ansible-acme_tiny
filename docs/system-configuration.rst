@@ -3,6 +3,7 @@ System configuration
 
 .. _acme_tiny_ref_fs_layout:
 
+
 File system layout
 ------------------
 
@@ -21,12 +22,13 @@ Server path                                             Ansible role variable
 :file:`/etc/ssl/acme-tiny/example.com/example.com.crt`  :envvar:`acme_tiny__certificate`
 ======================================================= ==================================
 
-When setting a :envvar:`acme_tiny__cert_type` other than ``plain`` or ``chain``
-an additional layer of indirection through symlinks which will make the
-certificates accessible in a transparent way. For each service the role will
-create a :file:`ssl/` subdirectory from where the actual certificates and keys
-are symlinked. Like this the CA could be changed easily without reconfiguration
-of the secured services.
+When :envvar:`acme_tiny__service` is not empty and an additional layer of
+indirection through symlinks which will make the certificates accessible in
+a transparent way. For each service the role will create a :file:`ssl/`
+subdirectory from where the actual certificates and keys are symlinked. Like
+this the CA could be changed easily without reconfiguration of the secured
+services. This behavour can be disabled by setting
+:envvar:`acme_tiny__cert_symlink` to ``False``.
 
 E.g. For for Apache :program:`httpd` this would look like this::
 
@@ -35,13 +37,8 @@ E.g. For for Apache :program:`httpd` this would look like this::
 
 For :program:`lighttpd`::
 
-    /etc/lighttpd/ssl/example.com.pem -> /etc/ssl/acme-tiny/example.com/example.com_lighttpd.pem
+    /etc/lighttpd/ssl/example.com.pem -> /etc/ssl/acme-tiny/example.com/example.com_keycert.pem
     /etc/lighttpd/ssl/ca.crt          -> /etc/ssl/acme-tiny/intermediate.crt
-
-For :program:`Dovecot`::
-
-    /etc/dovecot/ssl/example.com.crt -> /etc/ssl/acme-tiny/example.com/example.com.crt
-    /etc/dovecot/ssl/example.com.key -> /etc/ssl/acme-tiny/example.com/example.com.key
 
 
 .. _acme_tiny_ref_service_cfg:
@@ -127,6 +124,40 @@ Postfix
 
 - Upstream documentation:
   `Postfix TLS Support <http://www.postfix.org/TLS_README.html>`_
+
+
+.. _acme_tiny_ref_custom_svc:
+
+Custom services
+~~~~~~~~~~~~~~~
+
+The :envvar:`acme_tiny__service_map` configuration dictionary can be
+overwritten from the Ansible inventory to extend the definition with a new
+service or adjust the current behaviour. Each element has the service
+name as key and needs to define the following properties:
+
+`cert_format`
+ Certificate format. See :envvar:`acme_tiny__cert_format` for valid
+ options.
+
+`cert_directory`
+ Custom directory from where the certificate and key will be symlinked.
+ See ref:`acme_tiny_ref_fs_layout` for more details.
+
+`service_name`
+ Name of the service which needs to be restarted after certificate renewal.
+
+*Example*
+
+Custom inventory definition for `Pound <http://www.apsis.ch/pound>`:
+
+.. code-block:: yaml
+
+    acme_tiny__service_map:
+      pound:
+        cert_format: 'keycert'
+        cert_directory: '/etc/pound/ssl'
+        service_name: 'pound'
 
 
 .. _acme_tiny_ref_cert_renewal:

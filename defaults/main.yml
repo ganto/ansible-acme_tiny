@@ -87,47 +87,95 @@ acme_tiny__cert_request: '{{ acme_tiny__cert_dir }}/{{ acme_tiny__cert_name }}.c
 acme_tiny__certificate: '{{ acme_tiny__cert_dir }}/{{ acme_tiny__cert_name }}.crt'
 
 
-# .. envvar:: acme_tiny__cert_type
+# Service configuration [[[
+# -------------------------
+
+# .. envvar:: acme_tiny__service
 #
-# List of output certificate type(s). String or list. Can be one of ``plain``,
-# ``apache2``, ``chain``, ``dovecot``, ``httpd``, ``lighttpd``, ``nginx``,
-# ``postfix``.
+# Name (or YAML list of names) of the service for which the certificate should
+# be installed and which should be restarted after certificate replacement.
+# Value must be one of the configuration keys defined in
+# :envvar:`acme_tiny__service_map`. A custom service can be chosen by
+# redefining :envvar:`acme_tiny__service_map` in the Ansible inventory.
+acme_tiny__service: ''
+
+
+# .. envvar:: acme_tiny__service_map
+#
+# Configuration map for defining default role behaviour regarding individual
+# services. For more information see :ref:`acme_tiny_ref_custom_svc`.
+acme_tiny__service_map:
+  apache2:
+    cert_format: 'chain'
+    cert_directory: '/etc/apache2/ssl'
+    service_name: 'apache2'
+  dovecot:
+    cert_format: 'chain'
+    cert_directory: '/etc/dovecot/ssl'
+    service_name: 'dovecot'
+  httpd:
+    cert_format: 'chain'
+    cert_directory: '/etc/httpd/ssl'
+    service_name: 'httpd'
+  lighttpd:
+    cert_format: 'keycert'
+    cert_directory: '/etc/lighttpd/ssl'
+    service_name: 'lighttpd'
+  nginx:
+    cert_format: 'chain'
+    cert_directory: '/etc/nginx/ssl'
+    service_name: 'nginx'
+  postfix:
+    cert_format: 'chain'
+    cert_directory: '/etc/postfix/ssl'
+    service_name: 'postfix'
+
+
+# .. envvar:: acme_tiny__service_restart
+#
+# Restart affected service after certificate has been replaced.
+acme_tiny__service_restart: True
+
+
+# .. envvar:: acme_tiny__cert_format
+#
+# Certificate format. By default the format will be determined by the service
+# name (see :envvar:`acme_tiny__service_map`). The value must be one of
+# ``plain``, ``chain`` or ``keycert``. If :envvar:`acme_tiny__service` is
+# undefined or empty the format will be ``plain``.
 #
 # Parameter description:
 #
 # ``plain``
-#   Simply store the certificate under :envvar:`acme_tiny__certificate`.
+#   Simply store the certificate base64-encoded under
+#   :envvar:`acme_tiny__certificate`.
 #
 # ``chain``
-#   Additionally generate a certificate file including the trust chain. The
-#   certificate chain will be stored in
-#   :file:`<acme-tiny-cert-dir>/<cert-name>_chain.crt` depending on the
-#   values of :envvar:`acme_tiny__cert_dir` and :envvar:`acme_tiny__cert_name`.
+#   Same as ``plain`` but additionally generate a certificate chain including
+#   the certificates of the issuing certificate authority. The certificate
+#   chain will be stored in :file:`<acme-tiny-cert-dir>/<cert-name>_chain.crt`
+#   depending on the values of :envvar:`acme_tiny__cert_dir` and
+#   :envvar:`acme_tiny__cert_name`.
 #
-# ``apache2``/``httpd``
-#   Symlink private key and certificate chain from :file:`/etc/apache2/ssl` or
-#   :file:`/etc/httpd/ssl` respectively and restart the corresponding service
-#   after certificate update.
+# ``keycert``
+#   Same as ``plain`` but additionally generate a PEM file which includes the
+#   base64-encoded RSA key and certificate. The PEM file will be stored in
+#   :file:`<acme-tiny-cert-dir>/<cert-name>.pem` depending on the values of
+#   :envvar:`acme_tiny__cert_dir` and :envvar:`acme_tiny__cert_name`.
 #
-# ``dovecot``
-#   Symlink key and certificate from :file:`/etc/dovecot/ssl` and restart the
-#   ``dovecot`` service after certificate update.
+acme_tiny__cert_format: '{{ acme_tiny__service_map[acme_tiny__service].cert_format
+                            if (acme_tiny__service|d() and
+                                acme_tiny__service in acme_tiny__service_map|d({}) and
+                                "cert_format" in acme_tiny__service_map[acme_tiny__service])
+                            else "plain" }}'
+
+
+# .. envvar:: acme_tiny__cert_symlink
 #
-# ``lighttpd``
-#   Create a PEM file including the RSA key and certificate, symlink it and
-#   the CA certificate from :file:`/etc/lighttpd/ssl` and restart the
-#   ``lighttpd`` service after certificate update.
-#
-# ``nginx``
-#   Symlink private key and certificate chain from :file:`/etc/nginx/ssl` and
-#   restart ``nginx`` service after certificate
-#   update.
-#
-# ``postfix``
-#   Symlink private key and certificate chain from :file:`/etc/postfix/ssl`
-#   and restart ``postfix`` service after certificate update.
-#
-acme_tiny__cert_type: 'plain'
+# Create symlinks from the service configuration directory
+# (``item.cert_directory`` defined in :envvar:`acme_tiny__service_map` to the
+# actual RSA key and certificate in :envvar:`acme_tiny__cert_dir`.
+acme_tiny__cert_symlink: True
 
                                                                    # ]]]
 # User configuration [[[

@@ -126,7 +126,7 @@ Such a variable file would look like this:
     #
 
     acme_tiny__domain: [ 'mydomain.com', 'www.mydomain.com' ]
-    acme_tiny__cert_type: 'nginx'
+    acme_tiny__service: 'nginx'
 
 ..
  Local Variables:
