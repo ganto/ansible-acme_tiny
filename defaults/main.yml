@@ -103,7 +103,7 @@ acme_tiny__service: ''
 # .. envvar:: acme_tiny__service_map
 #
 # Configuration map for defining default role behaviour regarding individual
-# services.
+# services. For more information see :ref:`acme_tiny_ref_custom_svc`.
 acme_tiny__service_map:
   apache2:
     cert_format: 'chain'
