@@ -32,7 +32,8 @@
   register: acme_tiny__register_keycert
   when: (item in acme_tiny__service_map|d({})) and
         ("cert_format" in acme_tiny__service_map[item]) and
-        (not acme_tiny__service_map[item].cert_format == "keycert")
+        (acme_tiny__service_map[item].cert_format == "keycert") and
+        (acme_tiny__register_certificate | changed)
   with_items: '{{ acme_tiny__service
                   if acme_tiny__service is iterable and not acme_tiny__service is string
                   else [ acme_tiny__service ] }}'
@@ -41,7 +42,6 @@
   file:
     path: '{{ acme_tiny__cert_dir }}/{{ acme_tiny__cert_name }}_keycert.pem'
     mode: '0600'
-  when: acme_tiny__register_keycert|changed
 
 - name: Merge certificate chain
   become: True
@@ -49,7 +49,7 @@
   shell: 'cat {{ acme_tiny__certificate }} {{ acme_tiny__config_dir }}/{intermediate.crt,ca.crt} > {{ acme_tiny__cert_dir }}/{{ acme_tiny__cert_name }}_chain.crt'
   when: (item in acme_tiny__service_map|d({})) and
         ("cert_format" in acme_tiny__service_map[item]) and
-        (not acme_tiny__service_map[item].cert_format == "chain")
+        (acme_tiny__service_map[item].cert_format == "chain")
   with_items: '{{ acme_tiny__service
                   if acme_tiny__service is iterable and not acme_tiny__service is string
                   else [ acme_tiny__service ] }}'
