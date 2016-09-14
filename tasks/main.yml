@@ -55,9 +55,10 @@
                   else [ acme_tiny__service ] }}'
 
 - name: Restart service
-  command: sudo -n /usr/bin/systemctl restart '{{ item }}'
+  command: '{{ acme_tiny__service_map[item].restart_command }}'
   register: acme_tiny__register_service_restart
-  when: (item | length > 0) and
+  when: (item in acme_tiny__service_map|d({})) and
+        ("restart_command" in acme_tiny__service_map[item]) and
         (acme_tiny__register_certificate | changed) and
         (acme_tiny__service_restart|d(True))
   with_items: '{{ acme_tiny__service

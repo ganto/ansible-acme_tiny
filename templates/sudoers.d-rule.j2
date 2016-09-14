@@ -1,4 +1,4 @@
 {{ ansible_managed | comment }}
 
 # Allow restart of {{ item }} after certificate update
-{{ acme_tiny__user_name }} ALL=(root) NOPASSWD: /usr/bin/systemctl restart {{ item }}
+{{ acme_tiny__user_name }} ALL=(root) NOPASSWD: {{ acme_tiny__service_map[item].restart_command | regex_replace("(.*bin/)?sudo( -[-A-Za-z]+)* ", "") }}
