@@ -42,6 +42,9 @@
   file:
     path: '{{ acme_tiny__cert_dir }}/{{ acme_tiny__cert_name }}_keycert.pem'
     mode: '0600'
+  when: (item in acme_tiny__service_map|d({})) and
+        ("cert_format" in acme_tiny__service_map[item]) and
+        (acme_tiny__service_map[item].cert_format == "keycert")
 
 - name: Merge certificate chain
   become: True
