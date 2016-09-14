@@ -98,3 +98,17 @@
   include: setup_links.yml
   when: acme_tiny__symlinks|d(True) and
         acme_tiny__service|d()
+
+- name: Sudo rule for service restart
+  template:
+    src: sudoers.d-rule.j2
+    dest: '/etc/sudoers.d/{{ acme_tiny__user_name }}-{{ item }}-{{ acme_tiny__cert_name }}'
+    owner: 'root'
+    group: 'root'
+    mode: '0440'
+  when: (item in acme_tiny__service_map|d({})) and
+        ("restart_command" in acme_tiny__service_map[item]) and
+        (acme_tiny__service_map[item].restart_command | search("sudo"))
+  with_items: '{{ acme_tiny__service
+                  if acme_tiny__service is iterable and not acme_tiny__service is string
+                  else [ acme_tiny__service ] }}'

@@ -144,8 +144,10 @@ name as key and needs to define the following properties:
   Custom directory from where the certificate and key will be symlinked.
   See :ref:`acme_tiny_ref_fs_layout` for more details.
 
-``service_name``
-  Name of the service which needs to be restarted after certificate renewal.
+``restart_command``
+  Command which should be executed to restart this service (instance) as an
+  unprivileged user. If this command contains :program:`sudo`, a corresponding
+  rule will be created for the :envvar:`acme_tiny__user_name` account.
 
 *Example*
 
@@ -157,7 +159,7 @@ Custom Ansible inventory definition for `Pound <http://www.apsis.ch/pound>`_:
       pound:
         cert_format: 'keycert'
         cert_directory: '/etc/pound/ssl'
-        service_name: 'pound'
+        restart_command: '/usr/bin/sudo -n /usr/bin/systemctl restart pound'
 
 
 .. _acme_tiny_ref_cert_renewal:
