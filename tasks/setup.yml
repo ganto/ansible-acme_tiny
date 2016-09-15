@@ -102,7 +102,7 @@
 - name: Sudo rule for service restart
   template:
     src: sudoers.d-rule.j2
-    dest: '/etc/sudoers.d/{{ acme_tiny__user_name }}-{{ item }}-{{ acme_tiny__cert_name }}'
+    dest: '/etc/sudoers.d/{{ acme_tiny__user_name }}-{{ item }}-{{ acme_tiny__cert_name | replace(".", "_") }}'
     owner: 'root'
     group: 'root'
     mode: '0440'

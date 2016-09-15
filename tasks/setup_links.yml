@@ -50,7 +50,7 @@
 
 - name: Service certificate chain links
   file:
-    src: '{{ acme_tiny__certificate }}_chain.crt'
+    src: '{{ acme_tiny__certificate | replace(".crt", "") }}_chain.crt'
     path: '/etc/{{ item }}/ssl/{{ acme_tiny__cert_name }}.crt'
     state: link
     owner: 'root'
