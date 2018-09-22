@@ -137,7 +137,7 @@ def get_crt(account_key, csr, acme_dir, log=LOGGER, CA=DEFAULT_CA, disable_check
 
     # finalize the order with the csr
     log.info("Signing certificate...")
-    certificate_pem = _cmd(["openssl", "x509", "-req", "-days", "1", "-in", csr, "-signkey", "%s.key" % csr.rsplit(".")[0]],
+    certificate_pem = _cmd(["openssl", "x509", "-req", "-days", "1", "-in", csr, "-signkey", "%s.key" % csr.rpartition(".")[0]],
                            err_msg="Certificate signing failed") # mock
 
     log.info("Certificate signed!")
