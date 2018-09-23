@@ -62,11 +62,7 @@
     owner: 'root'
     group: 'root'
     mode: '0644'
-  with_items:
-    - url: 'https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem'
-      file: 'intermediate.crt'
-    - url: 'https://letsencrypt.org/certs/isrgrootx1.pem'
-      file: 'ca.crt'
+  with_items: "{{ acme_tiny__ca_chain }}"
 
 - name: Private key
   shell: /usr/bin/openssl genrsa '{{ acme_tiny__key_length }}' > '{{ acme_tiny__private_key }}'

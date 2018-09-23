@@ -8,7 +8,12 @@
 - name: Run acme-tiny
   become: True
   become_user: '{{ acme_tiny__user_name }}'
-  shell: 'acme-tiny --account-key {{ acme_tiny__config_dir }}/{{ acme_tiny__account_key }} --csr {{ acme_tiny__cert_request }} --acme-dir {{ acme_tiny__challenge_dir }} > {{ acme_tiny__certificate }}'
+  shell: >
+    acme-tiny
+    --directory-url '{{ acme_tiny__ca_directory_url }}'
+    --account-key '{{ acme_tiny__config_dir }}/{{ acme_tiny__account_key }}'
+    --csr '{{ acme_tiny__cert_request }}'
+    --acme-dir '{{ acme_tiny__challenge_dir }}' > '{{ acme_tiny__certificate }}'
   register: acme_tiny__register_certificate
   failed_when: False
 

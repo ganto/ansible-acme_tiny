@@ -31,6 +31,26 @@ acme_tiny__challenge_dir: '/var/www/acme-challenges'
 acme_tiny__account_key: 'account.key'
 
                                                                    # ]]]
+# Certificate authority configuration [[[
+# ---------------------------------------
+
+# .. envvar:: acme_tiny__ca_directory_url
+#
+# Certificate authority directory URL.
+acme_tiny__ca_directory_url: 'https://acme-v02.api.letsencrypt.org/directory'
+
+# .. envvar:: acme_tiny__ca_chain
+#
+# List of certificates which will be added to the certificate chain. Each list
+# item must be defined as a dictionary that defines `url` where the certificate
+# will be downloaded and `file` where the certificate will be stored.
+acme_tiny__ca_chain:
+  - url: 'https://letsencrypt.org/certs/letsencryptauthorityx3.pem'
+    file: 'intermediate.crt'
+  - url: 'https://letsencrypt.org/certs/isrgrootx1.pem'
+    file: 'ca.crt'
+
+                                                                   # ]]]
 # Domain configuration [[[
 # ------------------------
 
@@ -213,5 +233,6 @@ acme_tiny__log_dir: '/var/log/acme-tiny'
 # Log file defined in :file:`~/.ansible.cfg` of :envvar:`acme_tiny__user_name`.
 acme_tiny__log_file: '{{ acme_tiny__log_dir }}/{{ acme_tiny__user_name }}.log'
 
+                                                                   # ]]]
                                                                    # ]]]
                                                                    # ]]]
