@@ -34,6 +34,11 @@ acme_tiny__account_key: 'account.key'
 # Certificate authority configuration [[[
 # ---------------------------------------
 
+# .. envvar:: acme_tiny__ca_directory_url
+#
+# Certificate authority directory URL.
+acme_tiny__ca_directory_url: 'https://acme-v02.api.letsencrypt.org/directory'
+
 # .. envvar:: acme_tiny__ca_chain
 #
 # List of certificates which will be added to the certificate chain. Each list
