@@ -12,13 +12,34 @@ The current role maintainer is `ganto <ganto@linuxmonk.ch>`_.
 `ganto.acme_tiny master`_ - unreleased
 --------------------------------------
 
-.. _ganto.acme_tiny master: https://github.com/ganto/ansible-acme_tiny/compare/v0.1.0...master
+.. _ganto.acme_tiny master: https://github.com/ganto/ansible-acme_tiny/compare/v0.1.1...master
+
+ganto.acme_tiny v0.1.1 - 2018-09-23
+-----------------------------------
+
+.. _ganto.acme_tiny v0.1.1: https://github.com/ganto/ansible-acme_tiny/compare/v0.1.0...v0.1.1
+
+Added
+~~~~~
+
+- New variable :envvar:`acme_tiny__ca_directory_url` which allows customization
+  of certificate authority directory URL. Defaults to "Let's Encrypt".
+
+Changed
+~~~~~~~
+
+- Switch "Let's Encrypt Authority X3" intermediate certificate from IdenTrust
+  cross-signed to ISRG Root X1 signed, as this CA is now accepted by all major
+  browsers.
+
+- Enable customization of certificate chain via :envvar:`acme_tiny__ca_chain`
+  configuration variable.
 
 
 ganto.acme_tiny v0.1.0 - 2016-10-04
 -----------------------------------
 
-Added
+Added 
 ~~~~~
 
 - Initial release [ganto]
