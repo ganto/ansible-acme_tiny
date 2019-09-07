@@ -13,22 +13,32 @@
     --directory-url '{{ acme_tiny__ca_directory_url }}'
     --account-key '{{ acme_tiny__config_dir }}/{{ acme_tiny__account_key }}'
     --csr '{{ acme_tiny__cert_request }}'
-    --acme-dir '{{ acme_tiny__challenge_dir }}' > '{{ acme_tiny__certificate }}'
+    --acme-dir '{{ acme_tiny__challenge_dir }}' > '{{ acme_tiny__certificate }}.tmp'
   register: acme_tiny__register_certificate
   failed_when: False
 
 - name: Show acme-tiny output
-  debug: var=acme_tiny__register_certificate
+  debug:
+    var: acme_tiny__register_certificate
   when: not ansible_check_mode|d()
   failed_when: ("rc" in acme_tiny__register_certificate) and
                (not acme_tiny__register_certificate.rc == 0)
 
-- name: Certificate permissions
-  file:
-    path: '{{ acme_tiny__certificate }}'
+- name: Copy certificate from temporary file
+  copy:
+    src: '{{ acme_tiny__certificate }}.tmp'
+    dest: '{{ acme_tiny__certificate }}'
     owner: '{{ acme_tiny__user_name }}'
     group: '{{ acme_tiny__user_group }}'
     mode: '0644'
+    backup: '{{ acme_tiny__cert_backup }}'
+    remote_src: True
+    validate: /usr/bin/openssl x509 -in %s -noout -text
+
+- name: Cleanup temporary file
+  file:
+    path: '{{ acme_tiny__certificate }}.tmp'
+    state: absent
 
 - name: Merge certificate/key to PEM file
   become: True
