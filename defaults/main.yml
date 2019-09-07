@@ -30,6 +30,13 @@ acme_tiny__challenge_dir: '/var/www/acme-challenges'
 # :ref:`acme_tiny_ref_account_key`.
 acme_tiny__account_key: 'account.key'
 
+
+# .. envvar:: acme_tiny__cert_backup
+#
+# If a certificate already exists create a backup before overwriting it with
+# the re-newed certificate.
+acme_tiny__cert_backup: True
+
                                                                    # ]]]
 # Certificate authority configuration [[[
 # ---------------------------------------
