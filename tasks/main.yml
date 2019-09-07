@@ -25,6 +25,8 @@
                (not acme_tiny__register_certificate.rc == 0)
 
 - name: Copy certificate from temporary file
+  become: True
+  become_user: '{{ acme_tiny__user_name }}'
   copy:
     src: '{{ acme_tiny__certificate }}.tmp'
     dest: '{{ acme_tiny__certificate }}'
@@ -36,6 +38,8 @@
     validate: /usr/bin/openssl x509 -in %s -noout -text
 
 - name: Cleanup temporary file
+  become: True
+  become_user: '{{ acme_tiny__user_name }}'
   file:
     path: '{{ acme_tiny__certificate }}.tmp'
     state: absent
