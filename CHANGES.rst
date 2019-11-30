@@ -12,13 +12,24 @@ The current role maintainer is `ganto <ganto@linuxmonk.ch>`_.
 `ganto.acme_tiny master`_ - unreleased
 --------------------------------------
 
-.. _ganto.acme_tiny master: https://github.com/ganto/ansible-acme_tiny/compare/v0.1.2...master
+.. _ganto.acme_tiny master: https://github.com/ganto/ansible-acme_tiny/compare/v0.1.3...master
+
+
+`ganto.acme_tiny v0.1.3`_ - 2019-11-30
+--------------------------------------
+
+.. _ganto.acme_tiny v0.1.3: https://github.com/ganto/ansible-acme_tiny/compare/v0.1.2...v0.1.3
+
+Changed
+~~~~~~~
+
+- Fix `changed` filter removed in Ansible 2.9
 
 
 `ganto.acme_tiny v0.1.2`_ - 2019-09-07
 --------------------------------------
 
-.. _ganto.acme_tiny v0.1.2: https://github.com/ganto/ansible-acme_tiny/compare/v0.1.0...v0.1.2
+.. _ganto.acme_tiny v0.1.2: https://github.com/ganto/ansible-acme_tiny/compare/v0.1.1...v0.1.2
 
 Added
 ~~~~~
@@ -31,12 +42,6 @@ Changed
 
 - Don't overwrite existing certificate when running ``acme-tiny``. First create a
   temporary file and only copy certificate in place after validation.
-
-
-Changed
-~~~~~~~
-
-- Fix `changed` filter removed in Ansible 2.9
 
 
 `ganto.acme_tiny v0.1.1`_ - 2018-09-23
