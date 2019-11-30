@@ -33,6 +33,12 @@ Changed
   temporary file and only copy certificate in place after validation.
 
 
+Changed
+~~~~~~~
+
+- Fix `changed` filter removed in Ansible 2.9
+
+
 `ganto.acme_tiny v0.1.1`_ - 2018-09-23
 --------------------------------------
 

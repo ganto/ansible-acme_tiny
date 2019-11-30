@@ -52,7 +52,7 @@
   when: (item in acme_tiny__service_map|d({})) and
         ("cert_format" in acme_tiny__service_map[item]) and
         (acme_tiny__service_map[item].cert_format == "keycert") and
-        (acme_tiny__register_certificate | changed)
+        (acme_tiny__register_certificate is changed)
   with_items: '{{ acme_tiny__service
                   if acme_tiny__service is iterable and not acme_tiny__service is string
                   else [ acme_tiny__service ] }}'
@@ -84,7 +84,7 @@
   register: acme_tiny__register_service_restart
   when: (item in acme_tiny__service_map|d({})) and
         ("restart_command" in acme_tiny__service_map[item]) and
-        (acme_tiny__register_certificate | changed) and
+        (acme_tiny__register_certificate is changed) and
         (acme_tiny__service_restart|d(True))
   with_items: '{{ acme_tiny__service
                   if acme_tiny__service is iterable and not acme_tiny__service is string
