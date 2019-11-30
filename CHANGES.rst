@@ -14,6 +14,12 @@ The current role maintainer is `ganto <ganto@linuxmonk.ch>`_.
 
 .. _ganto.acme_tiny master: https://github.com/ganto/ansible-acme_tiny/compare/v0.1.1...master
 
+Changed
+~~~~~~~
+
+- Fix `changed` filter removed in Ansible 2.9
+
+
 `ganto.acme_tiny v0.1.1`_ - 2018-09-23
 --------------------------------------
 
