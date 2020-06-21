@@ -104,7 +104,7 @@
     mode: '0440'
   when: (item in acme_tiny__service_map|d({})) and
         ("restart_command" in acme_tiny__service_map[item]) and
-        (acme_tiny__service_map[item].restart_command | search("sudo"))
+        (acme_tiny__service_map[item].restart_command is search("sudo"))
   with_items: '{{ acme_tiny__service
                   if acme_tiny__service is iterable and not acme_tiny__service is string
                   else [ acme_tiny__service ] }}'
