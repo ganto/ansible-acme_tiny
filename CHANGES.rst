@@ -12,7 +12,18 @@ The current role maintainer is `ganto <ganto@linuxmonk.ch>`_.
 `ganto.acme_tiny master`_ - unreleased
 --------------------------------------
 
-.. _ganto.acme_tiny master: https://github.com/ganto/ansible-acme_tiny/compare/v0.1.3...master
+.. _ganto.acme_tiny master: https://github.com/ganto/ansible-acme_tiny/compare/v0.1.4...master
+
+
+`ganto.acme_tiny v0.1.4`_ - 2020-06-23
+--------------------------------------
+
+.. _ganto.acme_tiny v0.1.4: https://github.com/ganto/ansible-acme_tiny/compare/v0.1.3...v0.1.4
+
+Changed
+~~~~~~~
+
+- Fix `search` filter converted to test in Ansible 2.9
 
 
 `ganto.acme_tiny v0.1.3`_ - 2019-11-30
