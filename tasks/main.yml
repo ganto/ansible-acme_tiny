@@ -3,7 +3,7 @@
 - name: Setup acme-tiny and certificate request
   become: True
   include: setup.yml
-  when: not ansible_user == acme_tiny__user_name
+  when: not ansible_facts.user_id == acme_tiny__user_name
 
 - name: Run acme-tiny  # noqa 301
   become: True

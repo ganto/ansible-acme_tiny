@@ -2,7 +2,6 @@
 
 - name: "Request and setup Let's encrypt SSL certificate"
   hosts: acme_tiny
-  gather_facts: False
 
   roles:
     - ganto.acme_tiny
