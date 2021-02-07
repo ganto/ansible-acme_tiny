@@ -20,9 +20,10 @@
 - name: Show acme-tiny output
   debug:
     var: acme_tiny__register_certificate
-  when: not ansible_check_mode|d()
-  failed_when: ("rc" in acme_tiny__register_certificate) and
-               (not acme_tiny__register_certificate.rc == 0)
+  when: not ansible_check_mode
+  failed_when:
+    - ('rc' in acme_tiny__register_certificate)
+    - acme_tiny__register_certificate.rc != 0
 
 - name: Copy certificate from temporary file
   become: True
@@ -53,10 +54,11 @@
     '{{ acme_tiny__certificate }}'
     > '{{ acme_tiny__cert_dir }}/{{ acme_tiny__cert_name }}_keycert.pem'
   register: acme_tiny__register_keycert
-  when: (item in acme_tiny__service_map|d({})) and
-        ("cert_format" in acme_tiny__service_map[item]) and
-        (acme_tiny__service_map[item].cert_format == "keycert") and
-        (acme_tiny__register_certificate is changed)
+  when:
+    - item in acme_tiny__service_map.keys()
+    - ('cert_format' in acme_tiny__service_map[item].keys())
+    - acme_tiny__service_map[item].cert_format == 'keycert'
+    - acme_tiny__register_certificate is changed
   with_items: '{{ acme_tiny__service
                   if acme_tiny__service is iterable and not acme_tiny__service is string
                   else [ acme_tiny__service ] }}'
@@ -65,9 +67,10 @@
   file:
     path: '{{ acme_tiny__cert_dir }}/{{ acme_tiny__cert_name }}_keycert.pem'
     mode: '0600'
-  when: (item in acme_tiny__service_map|d({})) and
-        ("cert_format" in acme_tiny__service_map[item]) and
-        (acme_tiny__service_map[item].cert_format == "keycert")
+  when:
+    - item in acme_tiny__service_map.keys()
+    - ('cert_format' in acme_tiny__service_map[item].keys())
+    - acme_tiny__service_map[item].cert_format == 'keycert'
   with_items: '{{ acme_tiny__service
                   if acme_tiny__service is iterable and not acme_tiny__service is string
                   else [ acme_tiny__service ] }}'
@@ -80,9 +83,10 @@
     '{{ acme_tiny__certificate }}'
     '{{ acme_tiny__config_dir }}'/{intermediate.crt,ca.crt}
     > '{{ acme_tiny__cert_dir }}/{{ acme_tiny__cert_name }}_chain.crt'
-  when: (item in acme_tiny__service_map|d({})) and
-        ("cert_format" in acme_tiny__service_map[item]) and
-        (acme_tiny__service_map[item].cert_format == "chain")
+  when:
+    - item in acme_tiny__service_map.keys()
+    - ('cert_format' in acme_tiny__service_map[item].keys())
+    - acme_tiny__service_map[item].cert_format == 'chain'
   with_items: '{{ acme_tiny__service
                   if acme_tiny__service is iterable and not acme_tiny__service is string
                   else [ acme_tiny__service ] }}'
@@ -90,10 +94,11 @@
 - name: Restart service
   command: '{{ acme_tiny__service_map[item].restart_command }}'
   register: acme_tiny__register_service_restart
-  when: (item in acme_tiny__service_map|d({})) and
-        ("restart_command" in acme_tiny__service_map[item]) and
-        (acme_tiny__register_certificate is changed) and
-        (acme_tiny__service_restart|d(True))
+  when:
+    - item in acme_tiny__service_map.keys()
+    - ('restart_command' in acme_tiny__service_map[item].keys())
+    - acme_tiny__register_certificate is changed
+    - acme_tiny__service_restart | bool
   with_items: '{{ acme_tiny__service
                   if acme_tiny__service is iterable and not acme_tiny__service is string
                   else [ acme_tiny__service ] }}'

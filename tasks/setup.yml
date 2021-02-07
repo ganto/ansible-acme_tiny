@@ -99,13 +99,16 @@
   args:
     executable: '/bin/bash'
     creates: '{{ acme_tiny__cert_request }}'
-  when: acme_tiny__domain is iterable and not acme_tiny__domain is string
+  when:
+    - acme_tiny__domain is iterable
+    - not acme_tiny__domain is string
   failed_when: False
 
 - name: Prepare certificate symlinks
   include: setup_links.yml
-  when: acme_tiny__symlinks|d(True) and
-        acme_tiny__service|d()
+  when:
+    - acme_tiny__symlinks | bool
+    - acme_tiny__service
 
 - name: Sudo rule for service restart
   template:
@@ -114,9 +117,10 @@
     owner: 'root'
     group: 'root'
     mode: '0440'
-  when: (item in acme_tiny__service_map|d({})) and
-        ("restart_command" in acme_tiny__service_map[item]) and
-        (acme_tiny__service_map[item].restart_command is search("sudo"))
+  when:
+    - item in acme_tiny__service_map.keys()
+    - ('restart_command' in acme_tiny__service_map[item].keys())
+    - acme_tiny__service_map[item].restart_command is search('sudo')
   with_items: '{{ acme_tiny__service
                   if acme_tiny__service is iterable and not acme_tiny__service is string
                   else [ acme_tiny__service ] }}'
