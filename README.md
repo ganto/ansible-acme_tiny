@@ -16,7 +16,7 @@ restart the secured services after the certificate has been replaced.
 
 ### Getting started
 
-The role requires at least Ansible `v2.0.0`. To install it, run:
+The role requires at least Ansible `v2.7.0`. To install it, run:
 
 ```bash
 ansible-galaxy install ganto.acme_tiny
