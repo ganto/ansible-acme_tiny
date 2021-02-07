@@ -4,7 +4,7 @@
   file:
     path: '{{ acme_tiny__service_map[item].cert_dir
               if "cert_dir" in acme_tiny__service_map[item]
-              else "/etc/{{ item }}/ssl" }}'
+              else "/etc/" + item + "/ssl" }}'
     state: directory
     owner: 'root'
     group: 'root'
@@ -19,7 +19,7 @@
     src: '{{ acme_tiny__private_key }}'
     path: '{{ acme_tiny__service_map[item].cert_dir
               if "cert_dir" in acme_tiny__service_map[item]
-              else "/etc/{{ item }}/ssl" }}/{{ acme_tiny__cert_name }}.key'
+              else "/etc/" + item + "/ssl" }}/{{ acme_tiny__cert_name }}.key'
     state: link
     owner: 'root'
     group: 'root'
@@ -36,7 +36,7 @@
     src: '{{ acme_tiny__certificate }}'
     path: '{{ acme_tiny__service_map[item].cert_dir
               if "cert_dir" in acme_tiny__service_map[item]
-              else "/etc/{{ item }}/ssl" }}/{{ acme_tiny__cert_name }}.crt'
+              else "/etc/" +  item + "/ssl" }}/{{ acme_tiny__cert_name }}.crt'
     state: link
     owner: 'root'
     group: 'root'
