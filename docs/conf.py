@@ -15,9 +15,15 @@
 import sys
 import os
 
+# If extensions (or modules to document with autodoc) are in another directory,
+# add these directories to sys.path here. If the directory is relative to the
+# documentation root, use os.path.abspath to make it absolute, like shown here.
+sys.path.insert(0, os.path.abspath('_lib'))
+
 # Generate documentation on the fly based on Ansible default variables
 import yaml2rst
 
+# Convert comments from Ansible defaults to rst page
 yaml2rst.convert_file(
     '../defaults/main.yml',
     'defaults.rst',
@@ -25,11 +31,6 @@ yaml2rst.convert_file(
     yaml_strip_regex=r'^\s{66,67}#\s\]{3}\d?$',
 )
 
-
-# If extensions (or modules to document with autodoc) are in another directory,
-# add these directories to sys.path here. If the directory is relative to the
-# documentation root, use os.path.abspath to make it absolute, like shown here.
-#sys.path.insert(0, os.path.abspath('.'))
 
 # -- General configuration ------------------------------------------------
 

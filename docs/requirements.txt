@@ -1,10 +1,5 @@
 #
 # requirements.txt: Required for building the documentation
 #
-
 sphinx
 sphinx_rtd_theme
-
-# TODO: Install unreleased develop version until htgoebel makes a release.
-# yaml2rst
-https://github.com/ypid/yaml2rst/archive/feature/yaml-fold-strip-version-bump.zip
