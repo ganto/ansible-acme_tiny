@@ -139,7 +139,7 @@ def get_crt(account_key, csr, acme_dir, log=LOGGER, CA=DEFAULT_CA, disable_check
     log.info("Signing certificate...")
     csr_der = _cmd(["openssl", "req", "-in", csr, "-outform", "DER"], err_msg="DER Export Error")
     certificate_pem = _cmd(["openssl", "x509", "-req", "-days", "1", "-in", csr, "-signkey", "%s.key" % csr.rpartition(".")[0]],
-                           err_msg="Certificate signing failed") # mock
+                           err_msg="Certificate signing failed").decode('utf-8') # mock
 
     log.info("Certificate signed!")
     return certificate_pem
