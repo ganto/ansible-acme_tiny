@@ -2,7 +2,7 @@
 #
 # This is a mock version of the acme_tiny.py from https://github.com/diafygi/acme-tiny
 #
-# Copyright Daniel Roesler, under MIT license
+# Copyright Daniel Roesler, under MIT license, see LICENSE at github.com/diafygi/acme-tiny
 #
 # This mock version won't submit a certificate request to the "Let's Encrypt"
 # servers but simply output a self-signed certificate from the given CSR.
@@ -55,7 +55,7 @@ def get_crt(account_key, csr, acme_dir, log=LOGGER, CA=DEFAULT_CA, disable_check
 
     # helper function - make signed requests
     def _send_signed_request(url, payload, err_msg, depth=0):
-        payload64 = _b64(json.dumps(payload).encode('utf8'))
+        payload64 = "" if payload is None else _b64(json.dumps(payload).encode('utf8'))
         new_nonce = _do_request(directory['newNonce'])[2]['Replay-Nonce']
         protected = {"url": url, "alg": alg, "nonce": new_nonce}
         protected.update({"jwk": jwk} if acct_headers is None else {"kid": acct_headers['Location']})
@@ -70,17 +70,17 @@ def get_crt(account_key, csr, acme_dir, log=LOGGER, CA=DEFAULT_CA, disable_check
 
     # helper function - poll until complete
     def _poll_until_not(url, pending_statuses, err_msg):
-        while True:
-            result, _, _ = _do_request(url, err_msg=err_msg)
-            if result['status'] in pending_statuses:
-                time.sleep(2)
-                continue
-            return result
+        result, t0 = None, time.time()
+        while result is None or result['status'] in pending_statuses:
+            assert (time.time() - t0 < 3600), "Polling timeout" # 1 hour timeout
+            time.sleep(0 if result is None else 2)
+            result, _, _ = _send_signed_request(url, None, err_msg)
+        return result
 
     # parse account key to get public key
     log.info("Parsing account key...")
     out = _cmd(["openssl", "rsa", "-in", account_key, "-noout", "-text"], err_msg="OpenSSL Error")
-    pub_pattern = r"modulus:\n\s+00:([a-f0-9\:\s]+?)\npublicExponent: ([0-9]+)"
+    pub_pattern = r"modulus:[\s]+?00:([a-f0-9\:\s]+?)\npublicExponent: ([0-9]+)"
     pub_hex, pub_exp = re.search(pub_pattern, out.decode('utf8'), re.MULTILINE|re.DOTALL).groups()
     pub_exp = "{0:x}".format(int(pub_exp))
     pub_exp = "0{0}".format(pub_exp) if len(pub_exp) % 2 else pub_exp
@@ -100,7 +100,7 @@ def get_crt(account_key, csr, acme_dir, log=LOGGER, CA=DEFAULT_CA, disable_check
     common_name = re.search(r"Subject:.*? CN\s?=\s?([^\s,;/]+)", out.decode('utf8'))
     if common_name is not None:
         domains.add(common_name.group(1))
-    subject_alt_names = re.search(r"X509v3 Subject Alternative Name: \n +([^\n]+)\n", out.decode('utf8'), re.MULTILINE|re.DOTALL)
+    subject_alt_names = re.search(r"X509v3 Subject Alternative Name: (?:critical)?\n +([^\n]+)\n", out.decode('utf8'), re.MULTILINE|re.DOTALL)
     if subject_alt_names is not None:
         for san in subject_alt_names.group(1).split(", "):
             if san.startswith("DNS:"):
@@ -137,6 +137,7 @@ def get_crt(account_key, csr, acme_dir, log=LOGGER, CA=DEFAULT_CA, disable_check
 
     # finalize the order with the csr
     log.info("Signing certificate...")
+    csr_der = _cmd(["openssl", "req", "-in", csr, "-outform", "DER"], err_msg="DER Export Error")
     certificate_pem = _cmd(["openssl", "x509", "-req", "-days", "1", "-in", csr, "-signkey", "%s.key" % csr.rpartition(".")[0]],
                            err_msg="Certificate signing failed") # mock
 
