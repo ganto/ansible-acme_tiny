@@ -35,10 +35,6 @@ As there are different ways to setup :program:`acme-tiny` on the various
 distributions this task is not covered by the Ansible role. It has to be done
 manually prior to running the role.
 
-For Gentoo users the role author provides an `acme-tiny ebuild
-<https://github.com/ganto/linuxmonk-overlay/tree/master/app-crypt/acme-tiny>`_
-in the `linuxmonk-overlay <https://github.com/ganto/linuxmonk-overlay>`_.
-
 If there is no package provided by the distribution of your choice, it can
 also be installed from `PyPi <https://pypi.python.org/pypi/acme-tiny>`_.
 
