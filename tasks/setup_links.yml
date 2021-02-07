@@ -9,7 +9,7 @@
     owner: 'root'
     group: 'root'
     mode: '0755'
-  when: item in acme_tiny__service_map|d({})
+  when: item in acme_tiny__service_map.keys()
   with_items: '{{ acme_tiny__service
                   if acme_tiny__service is iterable and not acme_tiny__service is string
                   else [ acme_tiny__service ] }}'
@@ -24,9 +24,10 @@
     owner: 'root'
     group: 'root'
     force: yes
-  when: (item in acme_tiny__service_map|d({})) and
-        ("cert_format" in acme_tiny__service_map[item]) and
-        (not acme_tiny__service_map[item].cert_format == "keycert")
+  when:
+    - item in acme_tiny__service_map.keys()
+    - ('cert_format' in acme_tiny__service_map[item].keys())
+    - not acme_tiny__service_map[item].cert_format == 'keycert'
   with_items: '{{ acme_tiny__service
                   if acme_tiny__service is iterable and not acme_tiny__service is string
                   else [ acme_tiny__service ] }}'
@@ -41,9 +42,10 @@
     owner: 'root'
     group: 'root'
     force: yes
-  when: (item in acme_tiny__service_map|d({})) and
-        ("cert_format" in acme_tiny__service_map[item]) and
-        (acme_tiny__service_map[item].cert_format == "plain")
+  when:
+    - item in acme_tiny__service_map.keys()
+    - ('cert_format' in acme_tiny__service_map[item].keys())
+    - acme_tiny__service_map[item].cert_format == 'plain'
   with_items: '{{ acme_tiny__service
                   if acme_tiny__service is iterable and not acme_tiny__service is string
                   else [ acme_tiny__service ] }}'
@@ -56,9 +58,10 @@
     owner: 'root'
     group: 'root'
     force: yes
-  when: (item in acme_tiny__service_map|d({})) and
-        ("cert_format" in acme_tiny__service_map[item]) and
-        (acme_tiny__service_map[item].cert_format == "chain")
+  when:
+    - item in acme_tiny__service_map.keys()
+    - ('cert_format' in acme_tiny__service_map[item].keys())
+    - acme_tiny__service_map[item].cert_format == 'chain'
   with_items: '{{ acme_tiny__service
                   if acme_tiny__service is iterable and not acme_tiny__service is string
                   else [ acme_tiny__service ] }}'
@@ -71,9 +74,10 @@
     owner: 'root'
     group: 'root'
     force: yes
-  when: (item in acme_tiny__service_map|d({})) and
-        ("cert_format" in acme_tiny__service_map[item]) and
-        (acme_tiny__service_map[item].cert_format == "keycert")
+  when:
+    - item in acme_tiny__service_map.keys()
+    - ('cert_format' in acme_tiny__service_map[item].keys())
+    - acme_tiny__service_map[item].cert_format == 'keycert'
   with_items: '{{ acme_tiny__service
                   if acme_tiny__service is iterable and not acme_tiny__service is string
                   else [ acme_tiny__service ] }}'

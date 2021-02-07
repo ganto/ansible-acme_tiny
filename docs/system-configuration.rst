@@ -81,7 +81,7 @@ Dovecot
     ssl_key  = </etc/dovecot/ssl/example.com.key
 
 - Upstream documentation:
-  `Dovecot Wiki: SSL <http://wiki.dovecot.org/SSL>`_
+  `Dovecot Wiki: SSL <https://wiki.dovecot.org/SSL>`_
 
 
 .. _acme_tiny_ref_lighttpd:
@@ -95,7 +95,7 @@ Lighttpd
     ssl.cafile  /etc/lighttpd/ssl/ca.crt
 
 - Upstream documentation:
-  `Lighttpd Wiki: Secure HTTP <http://redmine.lighttpd.net/projects/lighttpd/wiki/Docs_SSL>`_
+  `Lighttpd Wiki: Secure HTTP <https://redmine.lighttpd.net/projects/lighttpd/wiki/Docs_SSL>`_
 
 
 .. _acme_tiny_ref_nginx:
@@ -109,7 +109,7 @@ Nginx
     ssl_certificate_key /etc/nginx/ssl/example.com.key
 
 - Upstream documentation:
-  `Module ngx_http_ssl_module <http://nginx.org/en/docs/http/ngx_http_ssl_module.html>`_
+  `Module ngx_http_ssl_module <https://nginx.org/en/docs/http/ngx_http_ssl_module.html>`_
 
 
 .. _acme_tiny_ref_postfix:
@@ -151,7 +151,7 @@ name as key and needs to define the following properties:
 
 *Example*
 
-Custom Ansible inventory definition for `Pound <http://www.apsis.ch/pound>`_:
+Custom Ansible inventory definition for `Pound <https://www.apsis.ch/pound.html>`_:
 
 .. code-block:: yaml
 

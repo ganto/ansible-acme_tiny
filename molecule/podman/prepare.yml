@@ -1,0 +1,31 @@
+---
+- name: Prepare
+  hosts: all
+
+  # The Letsencrypt account key has to be provided by the user prior of running
+  # the role. Let's fake it.
+  tasks:
+    - name: Create acme-tiny directory
+      file:
+        path: /etc/ssl/acme-tiny
+        state: directory
+        mode: '0755'
+
+    - name: Create Letsencrypt account key
+      openssl_privatekey:
+        path: /etc/ssl/acme-tiny/account.key
+        size: 1024
+        type: RSA
+
+    # Use mock `acme-tiny` script to fake certificate signing process
+    - name: Copy mock 'acme-tiny' to default PATH
+      copy:
+        src: '{{ playbook_dir }}/../../test/acme-tiny.py'
+        dest: /usr/local/bin/acme-tiny
+        mode: '0755'
+
+    - name: Create python compatibility symlink
+      file:
+        src: /usr/bin/python3
+        dest: /usr/local/bin/python
+        state: link
