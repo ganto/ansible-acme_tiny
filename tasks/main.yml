@@ -5,7 +5,7 @@
   include: setup.yml
   when: not ansible_user == acme_tiny__user_name
 
-- name: Run acme-tiny
+- name: Run acme-tiny  # noqa 301
   become: True
   become_user: '{{ acme_tiny__user_name }}'
   shell: >
