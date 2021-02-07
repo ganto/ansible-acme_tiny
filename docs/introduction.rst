@@ -1,7 +1,7 @@
 Introduction
 ============
 
-This `Ansible <https://ansible.com>`_ role will setup `acme-tiny
+This `Ansible <https://www.ansible.com>`_ role will setup `acme-tiny
 <https://github.com/diafygi/acme-tiny>`_, a minimal ACME client for the
 `Let's Encrypt <https://letsencrypt.org>`_ certificate authority. It also
 automates the creation of certificate requests and renewal of certificates,
@@ -36,7 +36,7 @@ distributions this task is not covered by the Ansible role. It has to be done
 manually prior to running the role.
 
 If there is no package provided by the distribution of your choice, it can
-also be installed from `PyPi <https://pypi.python.org/pypi/acme-tiny>`_.
+also be installed from `PyPi <https://pypi.org/project/acme-tiny/>`_.
 
 .. code-block:: console
 
