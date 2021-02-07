@@ -107,7 +107,7 @@
 - name: Prepare certificate symlinks
   include: setup_links.yml
   when:
-    - acme_tiny__symlinks | bool
+    - acme_tiny__cert_symlink | bool
     - acme_tiny__service
 
 - name: Sudo rule for service restart

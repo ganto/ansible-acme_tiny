@@ -18,6 +18,8 @@ Changed
 ~~~~~~~
 
 - Fix user check condition to be compatible with Ansible 2.10
+- Fix ignored variable :envvar:`acme_tiny__cert_symlink` when checking if
+  certificate symlinks should be made
 
 
 `ganto.acme_tiny v0.1.4`_ - 2020-06-23
