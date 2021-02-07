@@ -77,13 +77,25 @@
     mode: '0640'
 
 - name: Certificate request
-  shell: '/usr/bin/openssl req -new -sha256 -key {{ acme_tiny__private_key }} -subj "/CN={{ acme_tiny__domain }}" > {{ acme_tiny__cert_request }}'
+  shell: >
+    /usr/bin/openssl req
+    -new -sha256
+    -key '{{ acme_tiny__private_key }}'
+    -subj '/CN={{ acme_tiny__domain }}'
+    > '{{ acme_tiny__cert_request }}'
   args:
     creates: '{{ acme_tiny__cert_request }}'
   when: acme_tiny__domain is string
 
 - name: Multi-domain certificate request
-  shell: '/usr/bin/openssl req -new -sha256 -key {{ acme_tiny__private_key }} -subj "/" -reqexts SAN -config <(cat /etc/ssl/openssl.cnf <(printf "[SAN]\nsubjectAltName=DNS:{{ acme_tiny__domain | join(",DNS:") }}")) > {{ acme_tiny__cert_request }}'
+  shell: >
+    /usr/bin/openssl req
+    -new -sha256
+    -key '{{ acme_tiny__private_key }}'
+    -subj '/'
+    -reqexts SAN
+    -config <(cat /etc/ssl/openssl.cnf <(printf '[SAN]\nsubjectAltName=DNS:{{ acme_tiny__domain | join(",DNS:") }}'))
+    > '{{ acme_tiny__cert_request }}'
   args:
     executable: '/bin/bash'
     creates: '{{ acme_tiny__cert_request }}'

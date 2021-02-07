@@ -47,7 +47,11 @@
 - name: Merge certificate/key to PEM file
   become: True
   become_user: '{{ acme_tiny__user_name }}'
-  shell: 'cat {{ acme_tiny__private_key }} {{ acme_tiny__certificate }} > {{ acme_tiny__cert_dir }}/{{ acme_tiny__cert_name }}_keycert.pem'
+  shell: >
+    cat
+    '{{ acme_tiny__private_key }}'
+    '{{ acme_tiny__certificate }}'
+    > '{{ acme_tiny__cert_dir }}/{{ acme_tiny__cert_name }}_keycert.pem'
   register: acme_tiny__register_keycert
   when: (item in acme_tiny__service_map|d({})) and
         ("cert_format" in acme_tiny__service_map[item]) and
@@ -71,7 +75,11 @@
 - name: Merge certificate chain
   become: True
   become_user: '{{ acme_tiny__user_name }}'
-  shell: 'cat {{ acme_tiny__certificate }} {{ acme_tiny__config_dir }}/{intermediate.crt,ca.crt} > {{ acme_tiny__cert_dir }}/{{ acme_tiny__cert_name }}_chain.crt'
+  shell: >
+    cat
+    '{{ acme_tiny__certificate }}'
+    '{{ acme_tiny__config_dir }}'/{intermediate.crt,ca.crt}
+    > '{{ acme_tiny__cert_dir }}/{{ acme_tiny__cert_name }}_chain.crt'
   when: (item in acme_tiny__service_map|d({})) and
         ("cert_format" in acme_tiny__service_map[item]) and
         (acme_tiny__service_map[item].cert_format == "chain")
