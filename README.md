@@ -14,23 +14,27 @@ restart the secured services after the certificate has been replaced.
 
 ### Installation
 
-The role requires at least Ansible `v2.7.0`. To install it run:
+This role requires at least Ansible `v2.7.0`. To install it run:
 
-```bash
+```Shell
 ansible-galaxy install ganto.acme_tiny
 ```
 
 
 ### Documentation
 
-More information about `ganto.acme_tiny` Ansible role can be found at the
-[official documentation](https://gantoacme-tiny.readthedocs.io).
+The role documentation is available online at [gantoacme-tiny.readthedocs.io](https://gantoacme-tiny.readthedocs.io).
+
+It can be built locally from the [docs](docs/) directory by running:
+```Shell
+cd docs && make html
+```
 
 
 ### Author
 
 The `acme_tiny` Ansible role was written by:
 
-- [Reto Gantenbein](https://linuxmonk.ch) | [e-mail](mailto:reto.gantenbein@linuxmonk.ch) | [GitHub](https://github.com/ganto)
+- [Reto Gantenbein](https://linuxmonk.ch/) | [e-mail](mailto:reto.gantenbein@linuxmonk.ch) | [GitHub](https://github.com/ganto)
 
 License: [GPLv3](https://tldrlegal.com/license/gnu-general-public-license-v3-%28gpl-3%29)
