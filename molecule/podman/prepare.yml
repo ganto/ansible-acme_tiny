@@ -16,6 +16,7 @@
         path: /etc/ssl/acme-tiny/account.key
         size: 1024
         type: RSA
+        mode: '0640'
 
     # Use mock `acme-tiny` script to fake certificate signing process
     - name: Copy mock 'acme-tiny' to default PATH
@@ -29,3 +30,26 @@
         src: /usr/bin/python3
         dest: /usr/local/bin/python
         state: link
+
+    # Install apache2 to configure HTTPS service
+    - name: Install Apache2 httpd server
+      package:
+        name: apache2
+        state: present
+
+    - name: Enable HTTPS vhost
+      command: '{{ item }}'
+      loop:
+        - 'a2ensite default-ssl'
+        - 'a2enmod ssl'
+
+    # See docs/system-configuration.rst
+    - name: Configure HTTPS certificates
+      lineinfile:
+        path: /etc/apache2/sites-available/default-ssl.conf
+        regexp: '^(\s+){{ item.key }}(\s+)'
+        line: '\1{{ item.key }}\2{{ item.value }}'
+        backrefs: yes
+      with_dict:
+        SSLCertificateFile: /etc/apache2/ssl/example.com.crt
+        SSLCertificateKeyFile: /etc/apache2/ssl/example.com.key
