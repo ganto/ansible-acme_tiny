@@ -37,7 +37,7 @@
         name: apache2
         state: present
 
-    - name: Enable HTTPS vhost
+    - name: Enable HTTPS vhost  # noqa no-changed-when
       command: '{{ item }}'
       loop:
         - 'a2ensite default-ssl'
