@@ -29,6 +29,9 @@ Changed
   certificate was generated for a service defined in :envvar:`acme_tiny__service`
   which resulted in the :envvar:`acme_tiny__user_name` not being able to read
   the key anymore.
+- Update full path of :program:`systemctl` path used to restart services after
+  certificate updates from ``/usr/bin`` to ``/bin`` to be compatible with more
+  Linux distributions such as Debian.
 
 
 `ganto.acme_tiny v0.1.4`_ - 2020-06-23

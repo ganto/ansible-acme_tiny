@@ -159,7 +159,7 @@ Custom Ansible inventory definition for `Pound <https://www.apsis.ch/pound.html>
       pound:
         cert_format: 'keycert'
         cert_directory: '/etc/pound/ssl'
-        restart_command: '/usr/bin/sudo -n /usr/bin/systemctl restart pound'
+        restart_command: '/usr/bin/sudo -n /bin/systemctl restart pound'
 
 
 .. _acme_tiny_ref_cert_renewal:
