@@ -14,15 +14,13 @@
                   if acme_tiny__service is iterable and not acme_tiny__service is string
                   else [ acme_tiny__service ] }}'
 
-- name: Domain key links
+- name: RSA private key links
   file:
     src: '{{ acme_tiny__private_key }}'
     path: '{{ acme_tiny__service_map[item].cert_dir
               if "cert_dir" in acme_tiny__service_map[item]
               else "/etc/" + item + "/ssl" }}/{{ acme_tiny__cert_name }}.key'
     state: link
-    owner: 'root'
-    group: 'root'
     force: yes
   when:
     - item in acme_tiny__service_map.keys()
@@ -39,8 +37,6 @@
               if "cert_dir" in acme_tiny__service_map[item]
               else "/etc/" +  item + "/ssl" }}/{{ acme_tiny__cert_name }}.crt'
     state: link
-    owner: 'root'
-    group: 'root'
     force: yes
   when:
     - item in acme_tiny__service_map.keys()
@@ -55,8 +51,6 @@
     src: '{{ acme_tiny__certificate | replace(".crt", "") }}_chain.crt'
     path: '/etc/{{ item }}/ssl/{{ acme_tiny__cert_name }}.crt'
     state: link
-    owner: 'root'
-    group: 'root'
     force: yes
   when:
     - item in acme_tiny__service_map.keys()
@@ -71,8 +65,6 @@
     src: '{{ acme_tiny__cert_dir + "/" + acme_tiny__cert_name + "_keycert.pem" }}'
     path: '/etc/{{ item }}/ssl/{{ acme_tiny__cert_name }}.pem'
     state: link
-    owner: 'root'
-    group: 'root'
     force: yes
   when:
     - item in acme_tiny__service_map.keys()
