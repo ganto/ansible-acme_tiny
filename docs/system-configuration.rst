@@ -18,7 +18,7 @@ Server path                                             Ansible role variable
 :file:`/etc/ssl/acme-tiny`                              :envvar:`acme_tiny__config_dir`
 :file:`/etc/ssl/acme-tiny/example.com`                  :envvar:`acme_tiny__cert_dir`
 :file:`/etc/ssl/acme-tiny/example.com/example.com.key`  :envvar:`acme_tiny__private_key`
-:file:`/etc/ssl/acme-tiny/example.com/example.com.crq`  :envvar:`acme_tiny__cert_request`
+:file:`/etc/ssl/acme-tiny/example.com/example.com.csr`  :envvar:`acme_tiny__cert_request`
 :file:`/etc/ssl/acme-tiny/example.com/example.com.crt`  :envvar:`acme_tiny__certificate`
 ======================================================= ==================================
 
@@ -159,7 +159,7 @@ Custom Ansible inventory definition for `Pound <https://www.apsis.ch/pound.html>
       pound:
         cert_format: 'keycert'
         cert_directory: '/etc/pound/ssl'
-        restart_command: '/usr/bin/sudo -n /usr/bin/systemctl restart pound'
+        restart_command: '/usr/bin/sudo -n /bin/systemctl restart pound'
 
 
 .. _acme_tiny_ref_cert_renewal:

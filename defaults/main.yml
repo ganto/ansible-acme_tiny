@@ -135,27 +135,27 @@ acme_tiny__service_map:
   apache2:
     cert_format: 'chain'
     cert_directory: '/etc/apache2/ssl'
-    restart_command: '/usr/bin/sudo -n /usr/bin/systemctl restart apache2'
+    restart_command: '/usr/bin/sudo -n /bin/systemctl restart apache2'
   dovecot:
     cert_format: 'chain'
     cert_directory: '/etc/dovecot/ssl'
-    restart_command: '/usr/bin/sudo -n /usr/bin/systemctl restart dovecot'
+    restart_command: '/usr/bin/sudo -n /bin/systemctl restart dovecot'
   httpd:
     cert_format: 'chain'
     cert_directory: '/etc/httpd/ssl'
-    restart_command: '/usr/bin/sudo -n /usr/bin/systemctl restart httpd'
+    restart_command: '/usr/bin/sudo -n /bin/systemctl restart httpd'
   lighttpd:
     cert_format: 'keycert'
     cert_directory: '/etc/lighttpd/ssl'
-    restart_command: '/usr/bin/sudo -n /usr/bin/systemctl restart lighttpd'
+    restart_command: '/usr/bin/sudo -n /bin/systemctl restart lighttpd'
   nginx:
     cert_format: 'chain'
     cert_directory: '/etc/nginx/ssl'
-    restart_command: '/usr/bin/sudo -n /usr/bin/systemctl restart nginx'
+    restart_command: '/usr/bin/sudo -n /bin/systemctl restart nginx'
   postfix:
     cert_format: 'chain'
     cert_directory: '/etc/postfix/ssl'
-    restart_command: '/usr/bin/sudo -n /usr/bin/systemctl restart postfix'
+    restart_command: '/usr/bin/sudo -n /bin/systemctl restart postfix'
 
 
 # .. envvar:: acme_tiny__service_restart

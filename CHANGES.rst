@@ -25,6 +25,13 @@ Changed
 - Fix user check condition to be compatible with Ansible 2.10
 - Fix ignored variable :envvar:`acme_tiny__cert_symlink` when checking if
   certificate symlinks should be made
+- Fix bug where the RSA private key file system group was updated in case the
+  certificate was generated for a service defined in :envvar:`acme_tiny__service`
+  which resulted in the :envvar:`acme_tiny__user_name` not being able to read
+  the key anymore.
+- Update full path of :program:`systemctl` path used to restart services after
+  certificate updates from ``/usr/bin`` to ``/bin`` to be compatible with more
+  Linux distributions such as Debian.
 
 
 `ganto.acme_tiny v0.1.4`_ - 2020-06-23

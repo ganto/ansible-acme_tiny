@@ -5,7 +5,7 @@
   include: setup.yml
   when: not ansible_facts.user_id == acme_tiny__user_name
 
-- name: Run acme-tiny  # noqa 301
+- name: Run acme-tiny  # noqa no-changed-when
   become: True
   become_user: '{{ acme_tiny__user_name }}'
   shell: >
@@ -81,8 +81,9 @@
   shell: >
     cat
     '{{ acme_tiny__certificate }}'
-    '{{ acme_tiny__config_dir }}'/{intermediate.crt,ca.crt}
-    > '{{ acme_tiny__cert_dir }}/{{ acme_tiny__cert_name }}_chain.crt'
+    '{{ acme_tiny__config_dir }}'/intermediate.crt
+    '{{ acme_tiny__config_dir }}'/ca.crt
+    > {{ acme_tiny__cert_dir }}/{{ acme_tiny__cert_name }}_chain.crt
   when:
     - item in acme_tiny__service_map.keys()
     - ('cert_format' in acme_tiny__service_map[item].keys())

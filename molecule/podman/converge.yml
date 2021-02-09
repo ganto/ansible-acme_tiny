@@ -5,5 +5,8 @@
 - name: Converge
   hosts: all
 
+  vars:
+    acme_tiny__service: apache2
+
   roles:
     - role: ganto.acme_tiny
