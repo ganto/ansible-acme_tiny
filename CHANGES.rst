@@ -33,6 +33,8 @@ Changed
 - Update full path of :program:`systemctl` path used to restart services after
   certificate updates from ``/usr/bin`` to ``/bin`` to be compatible with more
   Linux distributions such as Debian.
+- Use Ansible ``openssl_privatekey`` module instead of :program:`openssl` to
+  generate RSA private key
 
 
 `ganto.acme_tiny v0.1.4`_ - 2020-06-23
