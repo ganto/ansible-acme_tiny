@@ -34,6 +34,7 @@ Changed
 - Update full path of :program:`systemctl` path used to restart services after
   certificate updates from ``/usr/bin`` to ``/bin`` to be compatible with more
   Linux distributions such as Debian.
+- Reload instead of restart services after certificate update
 - Use Ansible ``openssl_privatekey`` module instead of :program:`openssl` to
   generate RSA private key
 
