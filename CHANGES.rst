@@ -22,6 +22,8 @@ Added
 Changed
 ~~~~~~~
 
+- Update intermediate CA certificate to 'Let’s Encrypt R3'
+- Don't add Root CA certificate to certificate chain
 - Fix user check condition to be compatible with Ansible 2.10
 - Fix ignored variable :envvar:`acme_tiny__cert_symlink` when checking if
   certificate symlinks should be made
@@ -32,6 +34,8 @@ Changed
 - Update full path of :program:`systemctl` path used to restart services after
   certificate updates from ``/usr/bin`` to ``/bin`` to be compatible with more
   Linux distributions such as Debian.
+- Use Ansible ``openssl_privatekey`` module instead of :program:`openssl` to
+  generate RSA private key
 
 
 `ganto.acme_tiny v0.1.4`_ - 2020-06-23

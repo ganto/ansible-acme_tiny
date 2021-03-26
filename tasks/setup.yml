@@ -64,14 +64,11 @@
     mode: '0644'
   with_items: "{{ acme_tiny__ca_chain }}"
 
-- name: Private key
-  shell: /usr/bin/openssl genrsa '{{ acme_tiny__key_length }}' > '{{ acme_tiny__private_key }}'
-  args:
-    creates: '{{ acme_tiny__private_key }}'
-
-- name: Private key permissions
-  file:
+- name: Generate RSA private key
+  openssl_privatekey:
     path: '{{ acme_tiny__private_key }}'
+    type: RSA
+    size: '{{ acme_tiny__key_length }}'
     owner: 'root'
     group: '{{ acme_tiny__user_group }}'
     mode: '0640'
