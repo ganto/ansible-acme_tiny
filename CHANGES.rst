@@ -22,6 +22,7 @@ Added
 Changed
 ~~~~~~~
 
+- Update intermediate CA certificate to 'Let’s Encrypt R3'
 - Fix user check condition to be compatible with Ansible 2.10
 - Fix ignored variable :envvar:`acme_tiny__cert_symlink` when checking if
   certificate symlinks should be made

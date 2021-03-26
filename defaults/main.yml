@@ -52,7 +52,7 @@ acme_tiny__ca_directory_url: 'https://acme-v02.api.letsencrypt.org/directory'
 # item must be defined as a dictionary that defines `url` where the certificate
 # will be downloaded and `file` where the certificate will be stored.
 acme_tiny__ca_chain:
-  - url: 'https://letsencrypt.org/certs/letsencryptauthorityx3.pem'
+  - url: 'https://letsencrypt.org/certs/lets-encrypt-r3.pem'
     file: 'intermediate.crt'
   - url: 'https://letsencrypt.org/certs/isrgrootx1.pem'
     file: 'ca.crt'
