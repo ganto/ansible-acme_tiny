@@ -37,6 +37,11 @@
         name: apache2
         state: present
 
+    - name: Start Apache2 service
+      service:
+        name: apache2
+        state: started
+
     - name: Enable HTTPS vhost  # noqa no-changed-when
       command: '{{ item }}'
       loop:
