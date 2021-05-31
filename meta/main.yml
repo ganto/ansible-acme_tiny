@@ -3,6 +3,8 @@
 dependencies: []
 
 galaxy_info:
+  namespace: ganto
+  role_name: acme_tiny
   author: 'Reto Gantenbein'
   description: "Setup and renew Let's encrypt certificates with acme-tiny"
   license: 'GPL-3.0'
