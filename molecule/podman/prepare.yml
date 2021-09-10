@@ -33,9 +33,10 @@
 
     # Install apache2 to configure HTTPS service
     - name: Install Apache2 httpd server
-      package:
+      apt:
         name: apache2
         state: present
+        update_cache: yes
 
     - name: Start Apache2 service
       service:

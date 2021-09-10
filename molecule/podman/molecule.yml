@@ -9,7 +9,7 @@ driver:
   name: podman
 platforms:
   - name: instance
-    image: "geerlingguy/docker-debian10-ansible:latest"
+    image: "geerlingguy/docker-debian11-ansible:latest"
     command: ${MOLECULE_DOCKER_COMMAND:-""}
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
