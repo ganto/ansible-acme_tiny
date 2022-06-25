@@ -7,7 +7,7 @@
 
   tasks:
     - name: Check certificate-related files
-      stat:
+      ansible.builtin.stat:
         path: '{{ item }}'
       loop:
         - /etc/ssl/acme-tiny/example.com/example.com.key
@@ -18,7 +18,7 @@
       register: verify_cert_files
 
     - name: Private key, CSR, certificate and chain must exist
-      assert:
+      ansible.builtin.assert:
         quiet: true
         that: '{{ item.stat.exists }}'
       loop: '{{ verify_cert_files.results }}'
@@ -26,17 +26,17 @@
         label: '{{ item.stat.path }}'
 
     - name: Verify RSA private key
-      openssl_privatekey_info:
+      community.crypto.openssl_privatekey_info:
         path: /etc/ssl/acme-tiny/example.com/example.com.key
       register: verify_register_key
 
     - name: Validate RSA private key
-      assert:
+      ansible.builtin.assert:
         quiet: true
         that: verify_register_key.type == 'RSA'
 
     - name: Verify RSA private key permissions
-      assert:
+      ansible.builtin.assert:
         quiet: true
         that:
           - verify_cert_files.results[0].stat.pw_name == 'root'
@@ -44,19 +44,19 @@
           - verify_cert_files.results[0].stat.mode == '0640'
 
     - name: Verify certificate signing request
-      openssl_csr_info:
+      community.crypto.openssl_csr_info:
         path: /etc/ssl/acme-tiny/example.com/example.com.csr
       register: verify_register_csr
 
     - name: Verify X509 certificates
-      openssl_certificate_info:
+      community.crypto.x509_certificate_info:
         path: '{{ item }}'
       loop:
         - /etc/ssl/acme-tiny/example.com/example.com.crt
         - /etc/ssl/acme-tiny/example.com/example.com_chain.crt
 
     - name: Check HTTPS port
-      uri:
+      ansible.builtin.uri:
         url: https://127.0.0.1:443/
         headers:
           Host: example.com

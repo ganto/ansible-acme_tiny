@@ -6,13 +6,13 @@
   # the role. Let's fake it.
   tasks:
     - name: Create acme-tiny directory
-      file:
+      ansible.builtin.file:
         path: /etc/ssl/acme-tiny
         state: directory
         mode: '0755'
 
     - name: Create Letsencrypt account key
-      openssl_privatekey:
+      community.crypto.openssl_privatekey:
         path: /etc/ssl/acme-tiny/account.key
         size: 1024
         type: RSA
@@ -20,38 +20,38 @@
 
     # Use mock `acme-tiny` script to fake certificate signing process
     - name: Copy mock 'acme-tiny' to default PATH
-      copy:
+      ansible.builtin.copy:
         src: '{{ playbook_dir }}/../../test/acme-tiny.py'
         dest: /usr/local/bin/acme-tiny
         mode: '0755'
 
     - name: Create python compatibility symlink
-      file:
+      ansible.builtin.file:
         src: /usr/bin/python3
         dest: /usr/local/bin/python
         state: link
 
     # Install apache2 to configure HTTPS service
     - name: Install Apache2 httpd server
-      apt:
+      ansible.builtin.apt:
         name: apache2
         state: present
         update_cache: yes
 
     - name: Start Apache2 service
-      service:
+      ansible.builtin.service:
         name: apache2
         state: started
 
     - name: Enable HTTPS vhost  # noqa no-changed-when
-      command: '{{ item }}'
+      ansible.builtin.command: '{{ item }}'
       loop:
         - 'a2ensite default-ssl'
         - 'a2enmod ssl'
 
     # See docs/system-configuration.rst
     - name: Configure HTTPS certificates
-      lineinfile:
+      ansible.builtin.lineinfile:
         path: /etc/apache2/sites-available/default-ssl.conf
         regexp: '^(\s+){{ item.key }}(\s+)'
         line: '\1{{ item.key }}\2{{ item.value }}'
