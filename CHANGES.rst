@@ -37,6 +37,7 @@ Changed
 - Reload instead of restart services after certificate update
 - Use Ansible ``openssl_privatekey`` module instead of :program:`openssl` to
   generate RSA private key
+- Use fully qualified collection name (FQCN) for Ansible modules
 
 
 `ganto.acme_tiny v0.1.4`_ - 2020-06-23
