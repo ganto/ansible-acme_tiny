@@ -19,7 +19,7 @@ Installation
 Ansible Role
 ^^^^^^^^^^^^
 
-This role requires at least Ansible ``v2.7.0``. To install it, run:
+This role requires at least Ansible ``v2.8.0``. To install it, run:
 
 .. code-block:: console
 

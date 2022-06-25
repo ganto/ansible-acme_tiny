@@ -8,7 +8,7 @@ galaxy_info:
   author: 'Reto Gantenbein'
   description: "Setup and renew Let's encrypt certificates with acme-tiny"
   license: 'GPL-3.0'
-  min_ansible_version: '2.7.0'
+  min_ansible_version: '2.8.0'
   platforms:
     - name: Debian
       versions:
