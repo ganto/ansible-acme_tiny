@@ -1,2 +1,2 @@
-ansible
+ansible-base
 molecule[podman]

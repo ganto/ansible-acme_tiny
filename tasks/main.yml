@@ -2,13 +2,13 @@
 
 - name: Setup acme-tiny and certificate request
   become: True
-  include: setup.yml
+  ansible.builtin.include: setup.yml
   when: not ansible_facts.user_id == acme_tiny__user_name
 
 - name: Run acme-tiny  # noqa no-changed-when
   become: True
   become_user: '{{ acme_tiny__user_name }}'
-  shell: >
+  ansible.builtin.shell: >
     acme-tiny
     --directory-url '{{ acme_tiny__ca_directory_url }}'
     --account-key '{{ acme_tiny__config_dir }}/{{ acme_tiny__account_key }}'
@@ -18,7 +18,7 @@
   failed_when: False
 
 - name: Show acme-tiny output
-  debug:
+  ansible.builtin.debug:
     var: acme_tiny__register_certificate
   when: not ansible_check_mode
   failed_when:
@@ -28,7 +28,7 @@
 - name: Copy certificate from temporary file
   become: True
   become_user: '{{ acme_tiny__user_name }}'
-  copy:
+  ansible.builtin.copy:
     src: '{{ acme_tiny__certificate }}.tmp'
     dest: '{{ acme_tiny__certificate }}'
     owner: '{{ acme_tiny__user_name }}'
@@ -41,14 +41,14 @@
 - name: Cleanup temporary file
   become: True
   become_user: '{{ acme_tiny__user_name }}'
-  file:
+  ansible.builtin.file:
     path: '{{ acme_tiny__certificate }}.tmp'
     state: absent
 
 - name: Merge certificate/key to PEM file
   become: True
   become_user: '{{ acme_tiny__user_name }}'
-  shell: >
+  ansible.builtin.shell: >
     cat
     '{{ acme_tiny__private_key }}'
     '{{ acme_tiny__certificate }}'
@@ -64,7 +64,7 @@
                   else [ acme_tiny__service ] }}'
 
 - name: Fix PEM file permissions
-  file:
+  ansible.builtin.file:
     path: '{{ acme_tiny__cert_dir }}/{{ acme_tiny__cert_name }}_keycert.pem'
     mode: '0600'
   when:
@@ -78,7 +78,7 @@
 - name: Merge certificate chain
   become: True
   become_user: '{{ acme_tiny__user_name }}'
-  shell: >
+  ansible.builtin.shell: >
     cat
     '{{ acme_tiny__certificate }}'
     '{{ acme_tiny__config_dir }}'/intermediate.crt
@@ -92,7 +92,7 @@
                   else [ acme_tiny__service ] }}'
 
 - name: Restart service
-  command: '{{ acme_tiny__service_map[item].restart_command }}'
+  ansible.builtin.command: '{{ acme_tiny__service_map[item].restart_command }}'
   register: acme_tiny__register_service_restart
   when:
     - item in acme_tiny__service_map.keys()

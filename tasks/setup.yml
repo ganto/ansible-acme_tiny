@@ -1,12 +1,12 @@
 ---
 
 - name: Certificate renewal group
-  group:
+  ansible.builtin.group:
     name: '{{ acme_tiny__user_group }}'
     system: True
 
 - name: Certificate renewal user
-  user:
+  ansible.builtin.user:
     name: '{{ acme_tiny__user_name }}'
     group: '{{ acme_tiny__user_group }}'
     system: True
@@ -14,7 +14,7 @@
     createhome: yes
 
 - name: Ansible configuration
-  template:
+  ansible.builtin.template:
     src: 'ansible.cfg.j2'
     dest: '{{ acme_tiny__user_home }}/.ansible.cfg'
     owner: '{{ acme_tiny__user_name }}'
@@ -22,7 +22,7 @@
     mode: '0644'
 
 - name: Configuration directory
-  file:
+  ansible.builtin.file:
     path: '{{ acme_tiny__config_dir }}'
     state: directory
     owner: 'root'
@@ -30,7 +30,7 @@
     mode: '0755'
 
 - name: Challenge and logging directory
-  file:
+  ansible.builtin.file:
     path: '{{ item }}'
     state: directory
     owner: '{{ acme_tiny__user_name }}'
@@ -41,7 +41,7 @@
     - '{{ acme_tiny__log_dir }}'
 
 - name: Certificate directory
-  file:
+  ansible.builtin.file:
     path: '{{ acme_tiny__cert_dir }}'
     state: directory
     owner: '{{ acme_tiny__user_name }}'
@@ -49,14 +49,14 @@
     mode: '0755'
 
 - name: Account key permissions
-  file:
+  ansible.builtin.file:
     path: '{{ acme_tiny__config_dir }}/{{ acme_tiny__account_key }}'
     owner: 'root'
     group: '{{ acme_tiny__user_group }}'
     mode: '0640'
 
 - name: Download letsencrypt CA and intermediate certificates
-  get_url:
+  ansible.builtin.get_url:
     url: '{{ item.url }}'
     dest: '{{ acme_tiny__config_dir }}/{{ item.file }}'
     owner: 'root'
@@ -65,7 +65,7 @@
   with_items: "{{ acme_tiny__ca_chain }}"
 
 - name: Generate RSA private key
-  openssl_privatekey:
+  community.crypto.openssl_privatekey:
     path: '{{ acme_tiny__private_key }}'
     type: RSA
     size: '{{ acme_tiny__key_length }}'
@@ -74,7 +74,7 @@
     mode: '0640'
 
 - name: Certificate request
-  shell: >
+  ansible.builtin.shell: >
     /usr/bin/openssl req
     -new -sha256
     -key '{{ acme_tiny__private_key }}'
@@ -85,7 +85,7 @@
   when: acme_tiny__domain is string
 
 - name: Multi-domain certificate request
-  shell: >
+  ansible.builtin.shell: >
     /usr/bin/openssl req
     -new -sha256
     -key '{{ acme_tiny__private_key }}'
@@ -102,13 +102,13 @@
   failed_when: False
 
 - name: Prepare certificate symlinks
-  include: setup_links.yml
+  ansible.builtin.include: setup_links.yml
   when:
     - acme_tiny__cert_symlink | bool
     - acme_tiny__service
 
 - name: Sudo rule for service restart
-  template:
+  ansible.builtin.template:
     src: sudoers.d-rule.j2
     dest: '/etc/sudoers.d/{{ acme_tiny__user_name }}-{{ item }}-{{ acme_tiny__cert_name | replace(".", "_") }}'
     owner: 'root'

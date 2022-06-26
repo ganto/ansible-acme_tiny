@@ -192,8 +192,8 @@ acme_tiny__service_restart: True
 #   :envvar:`acme_tiny__cert_dir` and :envvar:`acme_tiny__cert_name`.
 #
 acme_tiny__cert_format: '{{ acme_tiny__service_map[acme_tiny__service].cert_format
-                            if (acme_tiny__service|d() and
-                                acme_tiny__service in acme_tiny__service_map|d({}) and
+                            if (acme_tiny__service and
+                                acme_tiny__service in acme_tiny__service_map | default({}) and
                                 "cert_format" in acme_tiny__service_map[acme_tiny__service])
                             else "plain" }}'
 
