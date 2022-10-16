@@ -12,7 +12,7 @@
   when: item in acme_tiny__service_map.keys()
   with_items: '{{ acme_tiny__service
                   if acme_tiny__service is iterable and not acme_tiny__service is string
-                  else [ acme_tiny__service ] }}'
+                  else [acme_tiny__service] }}'
 
 - name: RSA private key links
   ansible.builtin.file:
@@ -28,14 +28,14 @@
     - not acme_tiny__service_map[item].cert_format == 'keycert'
   with_items: '{{ acme_tiny__service
                   if acme_tiny__service is iterable and not acme_tiny__service is string
-                  else [ acme_tiny__service ] }}'
+                  else [acme_tiny__service] }}'
 
 - name: Service certificate links
   ansible.builtin.file:
     src: '{{ acme_tiny__certificate }}'
     path: '{{ acme_tiny__service_map[item].cert_dir
               if "cert_dir" in acme_tiny__service_map[item]
-              else "/etc/" +  item + "/ssl" }}/{{ acme_tiny__cert_name }}.crt'
+              else "/etc/" + item + "/ssl" }}/{{ acme_tiny__cert_name }}.crt'
     state: link
     force: yes
   when:
@@ -44,7 +44,7 @@
     - acme_tiny__service_map[item].cert_format == 'plain'
   with_items: '{{ acme_tiny__service
                   if acme_tiny__service is iterable and not acme_tiny__service is string
-                  else [ acme_tiny__service ] }}'
+                  else [acme_tiny__service] }}'
 
 - name: Service certificate chain links
   ansible.builtin.file:
@@ -58,7 +58,7 @@
     - acme_tiny__service_map[item].cert_format == 'chain'
   with_items: '{{ acme_tiny__service
                   if acme_tiny__service is iterable and not acme_tiny__service is string
-                  else [ acme_tiny__service ] }}'
+                  else [acme_tiny__service] }}'
 
 - name: Service PEM file links
   ansible.builtin.file:
@@ -72,4 +72,4 @@
     - acme_tiny__service_map[item].cert_format == 'keycert'
   with_items: '{{ acme_tiny__service
                   if acme_tiny__service is iterable and not acme_tiny__service is string
-                  else [ acme_tiny__service ] }}'
+                  else [acme_tiny__service] }}'

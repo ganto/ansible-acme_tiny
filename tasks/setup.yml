@@ -120,4 +120,4 @@
     - acme_tiny__service_map[item].restart_command is search('sudo')
   with_items: '{{ acme_tiny__service
                   if acme_tiny__service is iterable and not acme_tiny__service is string
-                  else [ acme_tiny__service ] }}'
+                  else [acme_tiny__service] }}'
