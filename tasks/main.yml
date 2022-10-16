@@ -1,8 +1,7 @@
 ---
 
 - name: Setup acme-tiny and certificate request
-  become: True
-  ansible.builtin.include: setup.yml
+  ansible.builtin.include_tasks: setup.yml
   when: not ansible_facts.user_id == acme_tiny__user_name
 
 - name: Run acme-tiny  # noqa no-changed-when
@@ -61,7 +60,7 @@
     - acme_tiny__register_certificate is changed
   with_items: '{{ acme_tiny__service
                   if acme_tiny__service is iterable and not acme_tiny__service is string
-                  else [ acme_tiny__service ] }}'
+                  else [acme_tiny__service] }}'
 
 - name: Fix PEM file permissions
   ansible.builtin.file:
@@ -73,7 +72,7 @@
     - acme_tiny__service_map[item].cert_format == 'keycert'
   with_items: '{{ acme_tiny__service
                   if acme_tiny__service is iterable and not acme_tiny__service is string
-                  else [ acme_tiny__service ] }}'
+                  else [acme_tiny__service] }}'
 
 - name: Merge certificate chain
   become: True
@@ -89,7 +88,7 @@
     - acme_tiny__service_map[item].cert_format == 'chain'
   with_items: '{{ acme_tiny__service
                   if acme_tiny__service is iterable and not acme_tiny__service is string
-                  else [ acme_tiny__service ] }}'
+                  else [acme_tiny__service] }}'
 
 - name: Restart service
   ansible.builtin.command: '{{ acme_tiny__service_map[item].restart_command }}'
@@ -101,4 +100,4 @@
     - acme_tiny__service_restart | bool
   with_items: '{{ acme_tiny__service
                   if acme_tiny__service is iterable and not acme_tiny__service is string
-                  else [ acme_tiny__service ] }}'
+                  else [acme_tiny__service] }}'

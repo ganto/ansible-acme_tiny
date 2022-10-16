@@ -1,6 +1,7 @@
 ---
 
 - name: Service SSL directory
+  become: True
   ansible.builtin.file:
     path: '{{ acme_tiny__service_map[item].cert_dir
               if "cert_dir" in acme_tiny__service_map[item]
@@ -12,9 +13,10 @@
   when: item in acme_tiny__service_map.keys()
   with_items: '{{ acme_tiny__service
                   if acme_tiny__service is iterable and not acme_tiny__service is string
-                  else [ acme_tiny__service ] }}'
+                  else [acme_tiny__service] }}'
 
 - name: RSA private key links
+  become: True
   ansible.builtin.file:
     src: '{{ acme_tiny__private_key }}'
     path: '{{ acme_tiny__service_map[item].cert_dir
@@ -28,14 +30,15 @@
     - not acme_tiny__service_map[item].cert_format == 'keycert'
   with_items: '{{ acme_tiny__service
                   if acme_tiny__service is iterable and not acme_tiny__service is string
-                  else [ acme_tiny__service ] }}'
+                  else [acme_tiny__service] }}'
 
 - name: Service certificate links
+  become: True
   ansible.builtin.file:
     src: '{{ acme_tiny__certificate }}'
     path: '{{ acme_tiny__service_map[item].cert_dir
               if "cert_dir" in acme_tiny__service_map[item]
-              else "/etc/" +  item + "/ssl" }}/{{ acme_tiny__cert_name }}.crt'
+              else "/etc/" + item + "/ssl" }}/{{ acme_tiny__cert_name }}.crt'
     state: link
     force: yes
   when:
@@ -44,9 +47,10 @@
     - acme_tiny__service_map[item].cert_format == 'plain'
   with_items: '{{ acme_tiny__service
                   if acme_tiny__service is iterable and not acme_tiny__service is string
-                  else [ acme_tiny__service ] }}'
+                  else [acme_tiny__service] }}'
 
 - name: Service certificate chain links
+  become: True
   ansible.builtin.file:
     src: '{{ acme_tiny__certificate | replace(".crt", "") }}_chain.crt'
     path: '/etc/{{ item }}/ssl/{{ acme_tiny__cert_name }}.crt'
@@ -58,9 +62,10 @@
     - acme_tiny__service_map[item].cert_format == 'chain'
   with_items: '{{ acme_tiny__service
                   if acme_tiny__service is iterable and not acme_tiny__service is string
-                  else [ acme_tiny__service ] }}'
+                  else [acme_tiny__service] }}'
 
 - name: Service PEM file links
+  become: True
   ansible.builtin.file:
     src: '{{ acme_tiny__cert_dir + "/" + acme_tiny__cert_name + "_keycert.pem" }}'
     path: '/etc/{{ item }}/ssl/{{ acme_tiny__cert_name }}.pem'
@@ -72,4 +77,4 @@
     - acme_tiny__service_map[item].cert_format == 'keycert'
   with_items: '{{ acme_tiny__service
                   if acme_tiny__service is iterable and not acme_tiny__service is string
-                  else [ acme_tiny__service ] }}'
+                  else [acme_tiny__service] }}'

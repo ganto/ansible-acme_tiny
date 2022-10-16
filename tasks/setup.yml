@@ -1,11 +1,13 @@
 ---
 
 - name: Certificate renewal group
+  become: True
   ansible.builtin.group:
     name: '{{ acme_tiny__user_group }}'
     system: True
 
 - name: Certificate renewal user
+  become: True
   ansible.builtin.user:
     name: '{{ acme_tiny__user_name }}'
     group: '{{ acme_tiny__user_group }}'
@@ -14,6 +16,7 @@
     createhome: yes
 
 - name: Ansible configuration
+  become: True
   ansible.builtin.template:
     src: 'ansible.cfg.j2'
     dest: '{{ acme_tiny__user_home }}/.ansible.cfg'
@@ -22,6 +25,7 @@
     mode: '0644'
 
 - name: Configuration directory
+  become: True
   ansible.builtin.file:
     path: '{{ acme_tiny__config_dir }}'
     state: directory
@@ -30,6 +34,7 @@
     mode: '0755'
 
 - name: Challenge and logging directory
+  become: True
   ansible.builtin.file:
     path: '{{ item }}'
     state: directory
@@ -41,6 +46,7 @@
     - '{{ acme_tiny__log_dir }}'
 
 - name: Certificate directory
+  become: True
   ansible.builtin.file:
     path: '{{ acme_tiny__cert_dir }}'
     state: directory
@@ -49,6 +55,7 @@
     mode: '0755'
 
 - name: Account key permissions
+  become: True
   ansible.builtin.file:
     path: '{{ acme_tiny__config_dir }}/{{ acme_tiny__account_key }}'
     owner: 'root'
@@ -56,6 +63,7 @@
     mode: '0640'
 
 - name: Download letsencrypt CA and intermediate certificates
+  become: True
   ansible.builtin.get_url:
     url: '{{ item.url }}'
     dest: '{{ acme_tiny__config_dir }}/{{ item.file }}'
@@ -65,6 +73,7 @@
   with_items: "{{ acme_tiny__ca_chain }}"
 
 - name: Generate RSA private key
+  become: True
   community.crypto.openssl_privatekey:
     path: '{{ acme_tiny__private_key }}'
     type: RSA
@@ -74,6 +83,7 @@
     mode: '0640'
 
 - name: Certificate request
+  become: True
   ansible.builtin.shell: >
     /usr/bin/openssl req
     -new -sha256
@@ -85,6 +95,7 @@
   when: acme_tiny__domain is string
 
 - name: Multi-domain certificate request
+  become: True
   ansible.builtin.shell: >
     /usr/bin/openssl req
     -new -sha256
@@ -102,12 +113,13 @@
   failed_when: False
 
 - name: Prepare certificate symlinks
-  ansible.builtin.include: setup_links.yml
+  ansible.builtin.include_tasks: setup_links.yml
   when:
     - acme_tiny__cert_symlink | bool
     - acme_tiny__service
 
 - name: Sudo rule for service restart
+  become: True
   ansible.builtin.template:
     src: sudoers.d-rule.j2
     dest: '/etc/sudoers.d/{{ acme_tiny__user_name }}-{{ item }}-{{ acme_tiny__cert_name | replace(".", "_") }}'
@@ -120,4 +132,4 @@
     - acme_tiny__service_map[item].restart_command is search('sudo')
   with_items: '{{ acme_tiny__service
                   if acme_tiny__service is iterable and not acme_tiny__service is string
-                  else [ acme_tiny__service ] }}'
+                  else [acme_tiny__service] }}'
