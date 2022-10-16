@@ -1,8 +1,7 @@
 ---
 
 - name: Setup acme-tiny and certificate request
-  become: True
-  ansible.builtin.include: setup.yml
+  ansible.builtin.include_tasks: setup.yml
   when: not ansible_facts.user_id == acme_tiny__user_name
 
 - name: Run acme-tiny  # noqa no-changed-when

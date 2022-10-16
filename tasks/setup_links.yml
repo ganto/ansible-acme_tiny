@@ -1,6 +1,7 @@
 ---
 
 - name: Service SSL directory
+  become: True
   ansible.builtin.file:
     path: '{{ acme_tiny__service_map[item].cert_dir
               if "cert_dir" in acme_tiny__service_map[item]
@@ -15,6 +16,7 @@
                   else [acme_tiny__service] }}'
 
 - name: RSA private key links
+  become: True
   ansible.builtin.file:
     src: '{{ acme_tiny__private_key }}'
     path: '{{ acme_tiny__service_map[item].cert_dir
@@ -31,6 +33,7 @@
                   else [acme_tiny__service] }}'
 
 - name: Service certificate links
+  become: True
   ansible.builtin.file:
     src: '{{ acme_tiny__certificate }}'
     path: '{{ acme_tiny__service_map[item].cert_dir
@@ -47,6 +50,7 @@
                   else [acme_tiny__service] }}'
 
 - name: Service certificate chain links
+  become: True
   ansible.builtin.file:
     src: '{{ acme_tiny__certificate | replace(".crt", "") }}_chain.crt'
     path: '/etc/{{ item }}/ssl/{{ acme_tiny__cert_name }}.crt'
@@ -61,6 +65,7 @@
                   else [acme_tiny__service] }}'
 
 - name: Service PEM file links
+  become: True
   ansible.builtin.file:
     src: '{{ acme_tiny__cert_dir + "/" + acme_tiny__cert_name + "_keycert.pem" }}'
     path: '/etc/{{ item }}/ssl/{{ acme_tiny__cert_name }}.pem'
