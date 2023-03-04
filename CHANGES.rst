@@ -14,6 +14,11 @@ The current role maintainer is `ganto <ganto@linuxmonk.ch>`_.
 
 .. _ganto.acme_tiny master: https://github.com/ganto/ansible-acme_tiny/compare/v1.0.0...master
 
+Fixed
+~~~~~
+
+- Ensure command tasks always set the correct ``changed_when`` condition
+
 
 `ganto.acme_tiny v1.0.1`_ - 2023-02-06
 --------------------------------------
@@ -23,7 +28,7 @@ The current role maintainer is `ganto <ganto@linuxmonk.ch>`_.
 Changed
 ~~~~~~~
 
-- Update deprecated Ansible module `include` with `include_tasks`
+- Update deprecated Ansible module ``include`` with ``include_tasks``
 
 
 `ganto.acme_tiny v1.0.0`_ - 2022-06-26
