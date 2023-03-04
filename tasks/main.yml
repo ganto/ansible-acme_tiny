@@ -47,6 +47,7 @@
 - name: Merge certificate/key to PEM file
   become: True
   become_user: '{{ acme_tiny__user_name }}'
+  changed_when: True
   ansible.builtin.shell: >
     cat
     '{{ acme_tiny__private_key }}'
@@ -77,6 +78,7 @@
 - name: Merge certificate chain
   become: True
   become_user: '{{ acme_tiny__user_name }}'
+  changed_when: True
   ansible.builtin.shell: >
     cat
     '{{ acme_tiny__certificate }}'
@@ -91,6 +93,7 @@
                   else [acme_tiny__service] }}'
 
 - name: Restart service
+  changed_when: True
   ansible.builtin.command: '{{ acme_tiny__service_map[item].restart_command }}'
   register: acme_tiny__register_service_restart
   when:
