@@ -1,3 +1,4 @@
 ---
 collections:
-  - community.crypto
+  - name: community.crypto
+  - name: community.docker
