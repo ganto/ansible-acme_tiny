@@ -1,6 +1,6 @@
 ## Ansible Role: ganto.acme_tiny
 
-[![CI](https://github.com/ganto/ansible-acme_tiny/workflows/CI/badge.svg?event=push)](https://github.com/ganto/ansible-acme_tiny/actions?query=workflow%3ACI)
+[![CI](https://github.com/ganto/ansible-acme_tiny/actions/workflows/ci.yml/badge.svg)](https://github.com/ganto/ansible-acme_tiny/actions/workflows/ci.yml)
 [![Ansible Galaxy](http://img.shields.io/badge/ansible--galaxy-ganto.acme__tiny-blue.svg?style=flat&logo=ansible)](https://galaxy.ansible.com/ganto/acme_tiny)
 [![Read the Docs](https://img.shields.io/badge/docs-gantoacme--tiny-darkblue.svg?style=flat&logo=read-the-docs)](https://gantoacme-tiny.readthedocs.io/)
 
