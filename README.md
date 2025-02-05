@@ -66,11 +66,13 @@ docker exec -it <container-id> /bin/sh                  # for docker
 molecule destroy [-s docker]
 ```
 
+## License
+
+[GPLv3](https://spdx.org/licenses/GPL-3.0-or-later.html)
+
 
 ### Author
 
 The `acme_tiny` Ansible role was written by:
 
 - [Reto Gantenbein](https://linuxmonk.ch/) | [e-mail](mailto:reto.gantenbein@linuxmonk.ch) | [GitHub](https://github.com/ganto)
-
-License: [GPLv3](https://tldrlegal.com/license/gnu-general-public-license-v3-%28gpl-3%29)
