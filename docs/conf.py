@@ -263,3 +263,10 @@ texinfo_documents = [
 
 # If true, do not generate a @detailmenu in the "Top" node's menu.
 #texinfo_no_detailmenu = False
+
+
+# -- Options for Linkcheck ------------------------------------------------
+
+# A list of regular expressions that match anchors that the linkcheck builder
+# should skip when checking the validity of anchors in links.
+linkcheck_anchors_ignore = [ "^use-existing-lets-encrypt-key$" ]
