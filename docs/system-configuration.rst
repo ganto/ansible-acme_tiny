@@ -81,7 +81,7 @@ Dovecot
     ssl_key  = </etc/dovecot/ssl/example.com.key
 
 - Upstream documentation:
-  `Dovecot Wiki: SSL <https://wiki.dovecot.org/SSL>`_
+  `Dovecot Documentation: SSL <https://doc.dovecot.org/latest/howto/ssl/>`_
 
 
 .. _acme_tiny_ref_lighttpd:
@@ -151,7 +151,7 @@ name as key and needs to define the following properties:
 
 *Example*
 
-Custom Ansible inventory definition for `Pound <https://www.apsis.ch/pound.html>`_:
+Custom Ansible inventory definition for `Pound <https://apsis.ch/pound/>`_:
 
 .. code-block:: yaml
 

@@ -33,7 +33,7 @@ Before the role can be run to send certificate requests an account key has
 to be generated. This can be done with the official `Certbot
 <https://certbot.eff.org/>`_ client. Make sure the key is converted into the
 correct format for :program:`acme-tiny` as described in `Use existing Let's
-Encrypt key <https://github.com/diafygi/acme-tiny#use-existing-lets-encrypt-key>`_.
+Encrypt key <https://github.com/diafygi/acme-tiny?#use-existing-lets-encrypt-key>`_.
 
 Eventually store the account key in :file:`/etc/ssl/acme-tiny/account.key`.
 
