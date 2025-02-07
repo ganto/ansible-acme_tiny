@@ -1,4 +1,4 @@
-## Ansible Role: ganto.acme_tiny
+# Ansible Role: ganto.acme_tiny
 
 [![CI](https://github.com/ganto/ansible-acme_tiny/actions/workflows/ci.yml/badge.svg)](https://github.com/ganto/ansible-acme_tiny/actions/workflows/ci.yml)
 [![Ansible Galaxy](http://img.shields.io/badge/ansible--galaxy-ganto.acme__tiny-blue.svg?style=flat&logo=ansible)](https://galaxy.ansible.com/ganto/acme_tiny)
@@ -11,8 +11,7 @@ client. It can be used to generate and send the initial certificate request as
 well as run by e.g. a cron job for regularly renewing the certificate and
 restart the secured services after the certificate has been replaced.
 
-
-### Installation
+## Installation
 
 This role requires at least Ansible `v2.8.0`. To install it run:
 
@@ -20,20 +19,19 @@ This role requires at least Ansible `v2.8.0`. To install it run:
 ansible-galaxy install ganto.acme_tiny
 ```
 
-
-### Documentation
+## Documentation
 
 The role documentation is available online at [gantoacme-tiny.readthedocs.io](https://gantoacme-tiny.readthedocs.io).
 
 It can be built locally from the [docs](docs/) directory by running:
+
 ```Shell
 cd docs && make html
 ```
 
+## Development
 
-### Development
-
-#### Testing
+### Testing
 
 There is a [Molecule](https://molecule.readthedocs.io/) test profile that can
 be used to verify the basic functionality of the role. The default scenario is
@@ -43,25 +41,32 @@ with the `-s docker` molecule arguments.
 
 1. Ensure you have the necessary dependencies installed (e.g. in a Python
    [venv](https://docs.python.org/3/tutorial/venv.html)):
+
 ```
 pip install -r molecule/default/requirements.txt        # for podman
 # or
 pip install -r molecule/docker/requirements.txt         # for docker
 ```
+
 2. Run the test suite. The options in brackets are optional but useful if you
    need to troubleshoot issues:
+
 ```
 molecule [-vvv] test [--destroy never][-s docker]
 ```
+
 3. If you used `--destroy never` the container will remain after the test run
    and can be inspected interactively via:
+
 ```
 podman exec -it <container-id> /bin/sh                  # for podman
 # or
 docker exec -it <container-id> /bin/sh                  # for docker
 ```
+
 4. Once you're done with inspecting the instance it has to be deleted before
    a new test run can be started:
+
 ```
 molecule destroy [-s docker]
 ```
@@ -70,9 +75,10 @@ molecule destroy [-s docker]
 
 [GPLv3](https://spdx.org/licenses/GPL-3.0-or-later.html)
 
+## Author
 
-### Author
+[Changelog](CHANGES.rst)
 
-The `acme_tiny` Ansible role was written by:
+The [ganto.acme_tiny](https://galaxy.ansible.com/ganto/acme_tiny) Ansible role was written and is maintained by:
 
 - [Reto Gantenbein](https://linuxmonk.ch/) | [e-mail](mailto:reto.gantenbein@linuxmonk.ch) | [GitHub](https://github.com/ganto)
