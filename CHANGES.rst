@@ -12,7 +12,13 @@ The current role maintainer is `ganto <ganto@linuxmonk.ch>`_.
 `ganto.acme_tiny master`_ - unreleased
 --------------------------------------
 
-.. _ganto.acme_tiny master: https://github.com/ganto/ansible-acme_tiny/compare/v1.0.0...master
+.. _ganto.acme_tiny master: https://github.com/ganto/ansible-acme_tiny/compare/v1.0.2...master
+
+
+`ganto.acme_tiny v1.0.2`_ - 2025-02-07
+--------------------------------------
+
+.. _ganto.acme_tiny v1.0.2: https://github.com/ganto/ansible-acme_tiny/compare/v1.0.1...v1.0.2
 
 Fixed
 ~~~~~
