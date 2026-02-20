@@ -14,6 +14,12 @@ The current role maintainer is `ganto <ganto@linuxmonk.ch>`_.
 
 .. _ganto.acme_tiny master: https://github.com/ganto/ansible-acme_tiny/compare/v1.0.2...master
 
+Fixed
+~~~~~
+
+- Reference "Let's Encrypt R13" intermediate CA certificate
+- setup: Conditionals must have a boolean result
+
 
 `ganto.acme_tiny v1.0.2`_ - 2025-02-07
 --------------------------------------

@@ -118,7 +118,7 @@
   ansible.builtin.include_tasks: setup_links.yml
   when:
     - acme_tiny__cert_symlink | bool
-    - acme_tiny__service
+    - acme_tiny__service | length > 0
 
 - name: Sudo rule for service restart
   become: True
